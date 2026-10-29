@@ -1,0 +1,25 @@
+# DATA_LOG.md
+
+Every external fetch is recorded here before it is relied on: URL, date, version/checksum, purpose. Failed fetches are recorded too. These fetches were for checking sources before CRITERIA.md [FILL] items are filled. No simulation inputs have been downloaded yet.
+
+| # | Date | URL | Version / checksum | Purpose | Status |
+|---|---|---|---|---|---|
+| 1 | 2026-10-29 | https://github.com/lsst/throughputs (`git ls-remote --tags`) + GitHub API `/commits/<tag>` | Latest tag **v1.9.2** → commit `0bcec2a6bec62e442a094df738ec2a9fdff844c5`, committed 2026-08-13T21:05:24Z (= HEAD at fetch). Tags `12.0`/`sims_2.2.x` point to a 2016-02-29 commit. | Identify the throughput version for §4.1 | OK. Only tag metadata was fetched; the throughput files themselves are not downloaded yet. |
+| 2 | 2026-10-29 | https://arxiv.org/abs/2512.17644v2 | v2, revised 2026-05-25 | Paper metadata | OK |
+| 3 | 2026-10-29 | https://arxiv.org/html/2512.17644v2 | sha256 `700d28fa792b6dd90fdc14a3ee9f35f50899304a8f086de8f3d8a675405ea308` (local copy in session scratchpad) | Table 3 depths (§4.1 fallback); M0/M1 method description; replication numbers | OK. Table 3 was extracted verbatim from the HTML. |
+| 4 | 2026-10-29 | https://arxiv.org/html/2003.13707v2 (Fahrion et al. 2020, A&A 637, A27) | not checksummed (read via WebFetch) | Look for Fornax GC [Fe/H] peaks (§4.2) | OK. No numerical Fornax [Fe/H] peaks are given (see notes). |
+| 5 | 2026-10-29 | Web search: ACS Fornax Cluster Survey GC color bimodality | — | Find a Fornax [Fe/H] source | No numerical peaks found |
+| 6 | 2026-10-29 | https://arxiv.org/abs/0912.0201 | LSST Science Book v2.0, 2009-12-01 | Metadata | OK |
+| 7 | 2026-10-29 | https://arxiv.org/pdf/0912.0201 | — | Count and p(z) equations | FAILED: file over 10 MB for WebFetch |
+| 8 | 2026-10-29 | https://www.lsst.org/sites/default/files/docs/sciencebook/SB_3.pdf | — | Same | FAILED: connection refused / timed out |
+| 9 | 2026-10-29 | https://arxiv.org/e-print/0912.0201v1 | sha256 `77bf6786ad9f50fb9bbd648738f86ac9aa75f040a2f830c56c98ecd910577354` (TeX source tarball, 44.6 MB, in session scratchpad) | Count and p(z) equations, verbatim from `common/common.tex` §"Galaxy Counts" | OK |
+| 10 | 2026-10-29 | https://arxiv.org/html/2512.17644v2 (same local copy as #3, re-read) | sha256 `700d28fa…ea308` | §II data depths; class counts for replication and star ratio | OK |
+| 11 | 2026-10-29 | https://stev.oapd.inaf.it/cgi-bin/trilegal (form page only; no simulation submitted) | form HTML sha256 `6ba4fff9427d9de724b9b0000924342996e09454b6e2ce11cbba113423e2e3b0`; **TRILEGAL 1.6** | Check the arm-S star source is reachable | OK. Note: the TLS certificate **failed verification** (WebFetch refused; curl needed `-k`). Offers "LSST ugrizy, Sept 2023, total filter throughputs R1.9 (ABmags)". Max 10 deg² per call, 10 min CPU limit. |
+
+## Notes from fetches
+- **#3 Table 3 (verbatim):** single image u 23.8, g 24.5, r 24.0, i 23.4, z 22.7, y 22.9. Coadd (10 yr) u 25.6, g 26.9, r 26.9, i 26.4, z 25.6, y 24.8. The caption attributes these to operations simulations, ref [15] = Bianco et al. 2022, ApJS 258, 1. Note that single-image y (22.9) is deeper than z (22.7). That's unusual, but it is what the table says.
+- **#3 Methods:** the paper is a **3-class** classifier (GC/galaxy/star; the MLP has 3 softmax outputs). RF tuning used a randomized search over n_trees, max_depth, min_samples_split, min_samples_leaf and max_features, with 5-fold stratified CV and selection by GC F1. **Search ranges and n_iter are not given.** The MLP optimizer, learning rate, epochs and batch size are not given. RF-15 result: precision 0.69, recall 0.29, F1 0.41 (Table 5). GCLF: TOM_i ≈ −8.5, σ ≈ 1.5, m−M ≈ 31.5.
+- **#4:** Fahrion et al. 2020 infer GC MDFs from ACSFCS colors through a nonlinear color–metallicity relation. The MDF shape depends on host mass (unimodal for low-mass hosts, bimodal at intermediate mass, unimodal metal-rich at the highest masses). They give no Fornax-wide peak values.
+- **#9 (verbatim):** "Based on the CFHTLS Deep survey, the cumulative galaxy counts for $20.5<i<25.5$ are well described by $N_{gal} = 46 \times 10^{0.31(i-25)}$ galaxies arcmin$^{-2}$." Also "$p(z) = {1 \over 2 z_0} (z/z_0)^2 \exp(-z/z_0)$ ... fits DEEP2 data well ... for $i<23$ ... $z_0=0.0417\,i-0.744$ (measured for $21.5<i<23$)" where **i is the sample's limiting magnitude**, and "for the $i<25$ sample, the mean redshift is 0.9 and the median is 0.8."
+- **#10 paper data:** u from FDS PSF photometry, 5σ limits (Table 1): u 24.1, g 25.4, r 24.9, i 24.0. g,r,i,z,Y from DES DR2 MAG_APER_5 (2.92″). DES Table 2 limits are **S/N = 10** in a 1.95″ aperture (MAG_APER_4): g 24.7, r 24.4, i 23.8, z 23.1, Y 21.7. The paper used APER_5, not APER_4, for photometry, so these limits describe a slightly different aperture. Test-set class counts: GC 288, galaxy 9916, **star 745** (Tables 5–7), so GC:star ≈ 1:2.6. Classes are labelled by selection cuts, not measured truth.
+- **#11:** TRILEGAL v1.6 form. Coordinates of NGC 1399 are not taken from this site.

@@ -1,6 +1,6 @@
 # PLAN.md — Phase 1 implementation plan
 
-Governs: CRITERIA.md @ `bd254ba` (sha256 `2e50e070…5fae11`) + AMENDMENTS.md A1. Written 2026-10-29 before any simulation code. **Items marked ⚑ are choices CRITERIA does not fix. Each needs the author's decision before Step 2 (listed together in §9).** Nothing here changes a threshold, gate or verdict rule.
+Governs: CRITERIA.md @ `bd254ba` (sha256 `2e50e070…5fae11`) + AMENDMENTS.md A1. Written 2026-10-29 before any simulation code. **Items marked ⚑ are choices CRITERIA does not fix. All were decided by the author on 2026-10-29 (§9): F1 became amendment A2, and F2–F13 were accepted as proposed.** Nothing here changes a threshold, gate or verdict rule.
 
 ## 1. Module layout
 
@@ -54,11 +54,7 @@ The rest-frame spectra are then dusted analytically with the Calzetti law (FSPS 
 
 **Noise (§4.1):** per band, σ_bg = f(m5)/5 in flux. The total flux variance is s² = σ_bg² + (κ·F_true)², with κ = 0.4 ln10 × 0.01 (the 0.01 mag floor in quadrature). Observed flux = F_true + N(0, s²). This is heteroscedastic, because s depends on the true flux and band. The likelihood uses it exactly (§3).
 
-**Detection and negative fluxes (⚑F1).** CRITERIA has no detection rule. At SV depth (i₅σ = 23.4), sources in the 24–25 and >25 bins are mostly below S/N 2, and many observed fluxes are negative, so magnitudes and colors are undefined. Proposed:
-- (a) A source enters the catalog only if observed S/N_i ≥ 5.
-- (b) All magnitudes are asinh magnitudes (Lupton et al. 1999), with per-band softening b equal to σ_bg. Colors are differences of these. They equal ordinary colors at high S/N and stay finite for negative fluxes.
-- (c) The 1:34 ratio is defined on the true-magnitude populations at i < 24, before detection.
-- Consequence: at SV, the bins fainter than ~23.5 are nearly empty and will be **GATED**. At C10 they are populated.
+**Catalog inclusion (AMENDMENTS A2):** a source is kept only if its reported magnitude error is ≤ 0.5 mag in all six bands, i.e. S/N_obs ≥ 2.17 per band, with the error computed from the observed flux. Ordinary AB magnitudes and colors are used. Class ratios, the GCLF and the counts are defined before the cut. At SV depth the fainter bins are expected to be sparse or GATED.
 
 ## 3. Bayes bound: Monte Carlo marginalization (CRITERIA §7)
 
@@ -66,7 +62,7 @@ The rest-frame spectra are then dusted analytically with the Calzetti law (FSPS 
 
 **Likelihoods:**
 - **Set C** (colors + observed i ≡ the observed flux vector f): p(f | class) = (1/L) Σ_l Π_b N(f_b; F_lb, s_b(F_lb)²). This is exact under the model, including heteroscedastic noise.
-- **Set A** (colors + bin membership): p(c, bin | class) = ∫_{a_i ∈ bin, S/N ≥ 5} p(f(c, a_i) | class) |J(c, a_i)| da_i, where a_i is the asinh i magnitude. 24-node Gauss–Legendre quadrature per bin, with adaptive subdivision when the integrand ESS is low. The Jacobian is class-independent but kept for the pooled LR.
+- **Set A** (colors + bin membership): p(c, bin | class) = ∫_{m_i ∈ bin, A2 cut} p(f(c, m_i) | class) |J(c, m_i)| dm_i over the observed i magnitude. 24-node Gauss–Legendre quadrature per bin, with adaptive subdivision when the integrand ESS is low. The Jacobian is class-independent but kept for the pooled LR.
 - **Set B:** the reported color errors are deterministic functions of the observed fluxes. If the map f → x_B is injective (checked numerically on the pilot), LR_B = LR_C exactly. In that case **Bound(B) = Bound(C) by construction (⚑F7)**. If it is not injective, B is marginalized over the non-identified direction like A.
 - **Within-bin LR:** p(x | GC)/p(x | cont) × P(bin | cont)/P(bin | GC). The bin factor is constant within a bin, so per-bin thresholds don't need it. It is used for the **pooled** curves, which rank by the full LR over all bins (⚑F11).
 
@@ -137,11 +133,11 @@ Root seed **20261029**. `numpy.random.SeedSequence(20261029).spawn` keys are `(c
 
 Commits after each working module. No push.
 
-## 9. ⚑ Decisions needed before Step 2 (none is in CRITERIA; F1 changes results most)
+## 9. ⚑ Decisions (author, 2026-10-29)
 
-| # | Issue | Proposed |
+| # | Issue | Decision (F2–F13: accepted as proposed) |
 |---|---|---|
-| F1 | Detection rule and negative fluxes | S/N_i ≥ 5 detection; asinh mags; ratio defined pre-detection |
+| F1 | Detection rule and negative fluxes | **Decided → AMENDMENTS A2:** paper's σ_m ≤ 0.5 in all bands; ordinary mags |
 | F2 | IGM absorption (affects u/g at z ≳ 2.5) | Include (Madau 1995, as in FSPS) |
 | F3 | Cosmology for the age cap | Planck18 |
 | F4 | [Fe/H] outside isochrone grid | Keep draws, FSPS clamps, report fraction |
@@ -154,4 +150,4 @@ Commits after each working module. No push.
 | F12 | Nebular parameters | gas_logz = logzsol, gas_logu = −2 |
 | F13 | Redshift cap | z ≤ 4 |
 
-Conflicts with CRITERIA found while planning: **none beyond these gaps**. A1 (SSP libraries) is already amended. F1 is the only one I'd treat as a candidate AMENDMENTS.md entry rather than an implementation detail, because it defines what enters the sample.
+Conflicts with CRITERIA found while planning: **none beyond these gaps**. A1 (SSP libraries) is already amended. F1 defines what enters the sample, so it is recorded as AMENDMENTS.md A2. F2–F13 are implementation choices recorded here.

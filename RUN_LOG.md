@@ -77,3 +77,8 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Author decision: `ext/` and `results/` live in the repo on `$SCRATCH` (`$SCRATCH/gc-cap`). The work will finish within 90 days; results are logged elsewhere afterwards and the scratch copy deleted. The author accepts that scratch is unbacked-up and purged.
 - Python venvs go in `$HOME` (Sherlock does not allow environments on `$SCRATCH`). `$HOME` had ~5.5 GB free at this time; `$GROUP_HOME` was 99% full; no `$OAK`.
 - Fetches and builds run in Slurm jobs (`scripts/slurm/`), not on the login node.
+
+## 2026-10-29 — Sherlock: Python version
+- Author decision: use the Sherlock module `python/3.12.1` (not 3.11). No results were produced on the laptop, so nothing has to match it. Toolchain modules: gcc/14.2.0, cmake/3.31.4. Venvs: stdlib `venv` + pip, no uv.
+- To fit `$HOME` (~5.5 GB free), torch is installed only in the fiducial venv. `.venv-padova` only builds the second SSP grid and gets the lock minus torch and its dependencies. Each venv's pins are written to `requirements.sherlock.<name>.lock`.
+- Build job 50193601 (`scripts/slurm/build_env.sbatch`), which runs after fetch job 50193512 succeeds.

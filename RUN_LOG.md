@@ -72,3 +72,8 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Author decision: Steps 2–5 (grids, simulator, tests, bound, methods, report) all run on Stanford Sherlock. Every production result comes from that one platform. The laptop python-fsps builds above were smoke-tested only and are not used for any result.
 - No simulation code written and no results produced on the laptop.
 - Added `HANDOFF.md` (rebuild procedure + acceptance check), `CLAUDE.md`, and `PHASE1_PROMPT.md` (author's original instructions, verbatim). PLAN §3 device wording updated (CUDA on Sherlock); this is an implementation detail and changes no design choice.
+
+## 2026-10-29 — Sherlock: storage layout
+- Author decision: `ext/` and `results/` live in the repo on `$SCRATCH` (`$SCRATCH/gc-cap`). The work will finish within 90 days; results are logged elsewhere afterwards and the scratch copy deleted. The author accepts that scratch is unbacked-up and purged.
+- Python venvs go in `$HOME` (Sherlock does not allow environments on `$SCRATCH`). `$HOME` had ~5.5 GB free at this time; `$GROUP_HOME` was 99% full; no `$OAK`.
+- Fetches and builds run in Slurm jobs (`scripts/slurm/`), not on the login node.

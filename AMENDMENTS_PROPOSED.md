@@ -74,3 +74,16 @@ These were all resolved by pre-freeze edits to CRITERIA.md, made at the author's
 - P9: resolved (§8 replication caveat; arm S in §4.3).
 - P10: resolved (§6 declared settings).
 - P11: resolved (§2 non-claims; §4.3 fixed p(z); slope axis kept with 0.25).
+
+---
+## P12. SSP libraries as written in §5 don't match current FSPS (raised 2026-10-29, after the freeze, before any compute; no results seen)
+- FSPS commit `b6600ff` (2026-09-28, DATA_LOG #12) defaults to **MIST + C3K_LR**. CRITERIA §5 says "FSPS default (MILES + MIST)", which is internally inconsistent for this version.
+- **BaSeL is no longer a compile option.** The spectral libraries are C3K_LR, C3K_HR and MILES. So "FSPS Padova + BaSeL" can't be built from current FSPS.
+- MILES in this version comes on an extended wavelength grid (91 Å – 10⁸ Å; the MILES range is padded with a theoretical library). It therefore covers ugrizy at all simulated redshifts. Padova2007 isochrones are present.
+- python-fsps 0.5.0 (PyPI) ships prebuilt wheels with default flags. Any non-default library needs a source build with flags.
+- Options:
+  1. Fiducial **MILES + MIST** (the library named in §5), second **Padova + C3K_LR**. The second differs from the fiducial in both isochrones and spectra, which matches §5's stated intent ("changes isochrones and spectral library"). *Recommended.*
+  2. Fiducial MILES + MIST, second Padova + MILES (isochrones only).
+  3. Pin an older FSPS commit that still has BaSeL for the second library. This mixes code versions.
+  4. Use §5's declared fallback: library sensitivity "not assessed", and every verdict labelled "conditional on a single SSP library".
+- Because CRITERIA.md is frozen, any of options 1–3 must be recorded in AMENDMENTS.md (timestamp, change, reason, "no results seen").

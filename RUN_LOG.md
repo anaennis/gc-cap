@@ -49,3 +49,13 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - No [FILL] markers remain.
 - Thresholds are unchanged: 0.02, 0.8, 20,000 GCs, 100 FPs, c ∈ {0.3, 0.5, 0.7}, 1000 bootstraps.
 - **Status: waiting for the author to `git init` and commit. The CRITERIA.md commit hash will be recorded here.**
+
+## 2026-10-29 — CRITERIA.md frozen
+- Commit: **bd254bab8548038ad89a93c67b110d5cbcf4269e** ("Freeze CRITERIA.md (Phase 1 pre-registration)", 2026-10-29 13:30:20 -0700). Pushed by the author to git@github.com:anaennis/gc-cap.git.
+- CRITERIA.md git blob: `ff5b3abcdcf15675f05836efd577e23372fbb205`. sha256: `2e50e070598483057f07ee1f2a79bdc780be0324f331cd862f073311285fae11`.
+- Every later run re-checks this sha256 before computing and refuses to run if it differs.
+
+## 2026-10-29 — Environment setup
+- `.venv` (uv, Python 3.11.3): numpy 2.4.6, scipy 1.17.1, scikit-learn 1.9.1, lightgbm 4.7.0, torch 2.15.0 (MPS available: True), pandas 3.1.0, pyarrow 26.0.0, matplotlib 3.11.2, pytest 9.2.0. Full pins are in `requirements.lock`. Packages come from PyPI via uv.
+- FSPS source cloned to `ext/fsps` (DATA_LOG #12), which will be `SPS_HOME`. Disk free after the clone: ~30 GiB.
+- python-fsps is **not yet installed**. Its build flags depend on the SSP-library decision (AMENDMENTS_PROPOSED P12). **BLOCKED on author.**

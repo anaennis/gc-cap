@@ -66,7 +66,7 @@ The rest-frame spectra are then dusted analytically with the Calzetti law (FSPS 
 - **Set B:** the reported color errors are deterministic functions of the observed fluxes. If the map f → x_B is injective (checked numerically on the pilot), LR_B = LR_C exactly. In that case **Bound(B) = Bound(C) by construction (⚑F7)**. If it is not injective, B is marginalized over the non-identified direction like A.
 - **Within-bin LR:** p(x | GC)/p(x | cont) × P(bin | cont)/P(bin | GC). The bin factor is constant within a bin, so per-bin thresholds don't need it. It is used for the **pooled** curves, which rank by the full LR over all bins (⚑F11).
 
-**Computation:** torch on MPS, float32 differences with log-sum-exp accumulation, in chunks.
+**Computation:** torch (CUDA on Sherlock for all production runs; MPS/CPU only for development), float32 differences with log-sum-exp accumulation, in chunks.
 - Pruning: latents are pre-sorted by true i, and for each test object only latents within ±7 s of observed i (Set C) or the bin ± 7 s (Set A) are scanned.
 - MC accuracy: the effective sample size of the latent weights is recorded per object. Objects with ESS < 50 trigger a 4× bank top-up for that object.
 - Each configuration is run with **two independent latent banks**. Their bound difference is reported per cell as MC error. It is a diagnostic, not a gate.

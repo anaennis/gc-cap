@@ -59,3 +59,11 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - `.venv` (uv, Python 3.11.3): numpy 2.4.6, scipy 1.17.1, scikit-learn 1.9.1, lightgbm 4.7.0, torch 2.15.0 (MPS available: True), pandas 3.1.0, pyarrow 26.0.0, matplotlib 3.11.2, pytest 9.2.0. Full pins are in `requirements.lock`. Packages come from PyPI via uv.
 - FSPS source cloned to `ext/fsps` (DATA_LOG #12), which will be `SPS_HOME`. Disk free after the clone: ~30 GiB.
 - python-fsps is **not yet installed**. Its build flags depend on the SSP-library decision (AMENDMENTS_PROPOSED P12). **BLOCKED on author.**
+
+## 2026-10-29 — python-fsps builds (AMENDMENTS.md A1)
+- Wrapper: python-fsps 0.5.0 sdist (DATA_LOG #13). Its bundled FSPS source (`05b5e55`) was **replaced by the FSPS `b6600ff` src/** (identical except the C3K nzinit 11→13 fix; DATA_LOG #15), so code and `SPS_HOME` data match.
+- Build env: `SDKROOT=$(xcrun --show-sdk-path)` was required (Homebrew gfortran 13.1 linker error "library 'System' not found" otherwise). `SPS_HOME=/Users/anaennis/Documents/gc-cap/ext/fsps`.
+- `.venv`: `FFLAGS="-DMIST=1 -DC3K_LR=0 -DMILES=1"`. sp.libraries = (mist, miles, DL07). Wavelengths 91 Å–1e8 Å, 5994 points. Isochrone Z grid: 13 values, 5.85e-5–0.0585.
+- `.venv-padova`: `FFLAGS="-DMIST=0 -DPADOVA=1 -DC3K_LR=1 -DMILES=0"`; same Python deps as `requirements.lock`. sp.libraries = (pdva, c3k_lr, DL07). Wavelengths 100 Å–1e8 Å, 1936 points. Isochrone Z grid: 22 values, 2e-4–0.03.
+- Smoke test (not a simulation): an old SSP and a delayed-tau + Calzetti + nebular spectrum at z = 0.5 return finite spectra in both builds. **Nebular emission is available** (§4.3).
+- Throughputs v1.9.2 sha256: total_g.dat=f8935b3a5514e436aea45895369f568bfcc57a682852b0abe3292fd754a7094f total_i.dat=ed05e3432509322d8cfb60ee4baf6b8bf1c08fa5a0f011ffee22838c325a9985 total_r.dat=7c2e6d39c57b8d36f664caf1087320af76cd098c382ccb5214e2830096f9a311 total_u.dat=d8fb220fed913551eb1ae5744a49e145d62aa2fd97786b515f30d20e13223b37 total_y.dat=f10cc09307ef535c323d9af473b4c4c8dc5905cbf50f91eea1a07cbb38008a20 total_z.dat=66f6a80ace390130e444eabaa59bb9837bbfed6b57af299b6c2cf27a53230c52 

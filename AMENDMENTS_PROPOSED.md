@@ -94,3 +94,11 @@ These were all resolved by pre-freeze edits to CRITERIA.md, made at the author's
 - Author chose (2026-10-30) the Sherlock module `py-pytorch/2.4.1_py312` (reports `2.4.0a0`, CUDA 12.6, cuDNN 9.4), exposed to `.venv` through a `.pth` file. Runtime jobs must `ml math py-pytorch/2.4.1_py312`.
 - Consequence: the module torch needs numpy 1.x, so both venvs pin `numpy<2` (laptop lock has numpy 2.4.6). Same pin in both, so the two SSP builds differ only in FSPS flags.
 - Environment-only; no threshold, gate, verdict or simulator parameter changes.
+
+---
+## P14. §4.4 test-set quotas have no stopping rule for bins the A2 cut empties (raised 2026-10-30, while writing `gccap/sample.py`; no results seen, no simulation run)
+- §4.4 asks for ≥ 200,000 GCs (fiducial; ≥ 67,000 elsewhere) **per observed-i bin**, GCs unweighted from the true GCLF. A2 states in advance that at SV depth the faint bins will be sparse. For a bin where few GCs survive the cut, "draw until the quota is met" may need an unbounded number of draws. Contaminants have the same issue per bin (§4.4 caps kept contaminants at 5 × 10⁶ per bin, but not the number drawn).
+- CRITERIA says nothing about when to stop. The choice only decides how far short a nearly-empty bin falls, and such a bin is GATED either way if it can't reach the 20,000-TP gate at c = 0.3 (≥ 67k GCs). No threshold, gate or verdict rule is affected.
+- Proposal (implementation constant, not a design change): stop drawing a class when every bin meets its quota **or** a fixed draw cap is reached, whichever comes first. Bins short of quota are reported with their actual counts; the gates decide GATED as usual. Suggested caps, fixed before any run: **GC draws ≤ 5 × 10⁷ per configuration; contaminant draws ≤ 5 × 10⁸ per class per configuration.** (Memory and time: about 1 h of interpolation per configuration on one node at those caps; to be measured on the pilot.)
+- Alternative: importance-sample GCs in true magnitude to fill faint bins. Not recommended: CRITERIA/PLAN have GCs unweighted, and it would change the precision estimator.
+- `sample.build_test` takes the caps as arguments; no production test set will be built until the author decides.

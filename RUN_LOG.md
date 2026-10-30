@@ -109,3 +109,14 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Fiducial venv torch: Sherlock module py-pytorch/2.4.1_py312 (reports `2.4.0a0`, CUDA 12.6), numpy 1.26.3. Jobs using `.venv` must `ml math py-pytorch/2.4.1_py312`.
 - **Platform decision (author, 2026-10-29):** Steps 2–5, including both grid builds, run on Sherlock; every production result comes from this one platform.
 - **Device (HANDOFF §4):** PLAN §3 "torch on MPS" means CUDA on Sherlock. Implementation detail, not a design change. Code is device-agnostic (cuda → mps → cpu).
+
+## 2026-10-30 — Step 2 started: simulator modules
+- Wrote `gccap/` frozen, seeds, photometry, grids, population, noise, features, sample, metrics, plus `tests/`. Device: grids and sampling are numpy (CPU); torch/CUDA enters with the bound (Step 3).
+- Implementation choices made before any grid was built (not design changes; recorded so they can't drift):
+  - Grids store dm_b = m_b − m_i and interpolate multilinearly in dm (magnitudes). Galaxy axes (log Z, log τ, log age, A_V, z) with PLAN §2 nodes; **A_V nodes: 9, step 0.25 mag** (PLAN leaves the count open). GC axes ([Fe/H] −3.0…+0.5 step 0.05, FSPS native log-age nodes 9.9–10.2).
+  - Calzetti (`dust_type=2`) and Madau IGM are line-for-line ports of FSPS `attn_curve.f90` and `igm_absorb.f90` at `b6600ff`. IGM is applied on the rest grid before redshifting (FSPS order), and only for z > 0.
+  - Bands fluxes whose ratio to i falls below 1e-16 (IGM-blanked u at high z) are floored at dm = 40; such sources fail A2 anyway.
+  - GC SSPs: `add_neb_emission=False` (old SSPs; CRITERIA §4.3 nebular applies to galaxies).
+  - Class ratio 1:34 (and 1:2.6) applied to true i < 24 on the pre-cut populations (A2), via N_gal_pop = 34 · Φ_GCLF(24) / F_counts(24) per GC draw.
+- **GC noise-free color plausibility bounds, declared before any grid exists** (required test; reported, never used to adjust anything): u−g 0.7–2.2, g−r 0.2–1.0, r−i 0.0–0.6, i−z −0.2–0.5, z−y −0.3–0.4.
+- AMENDMENTS_PROPOSED P14: §4.4 per-bin quotas need a draw cap for bins the A2 cut empties. Production test sets wait for the author's decision.

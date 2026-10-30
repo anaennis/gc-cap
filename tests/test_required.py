@@ -41,6 +41,4 @@ def test_gc_noise_free_color_range(library, record_property):
             assert np.all(np.isfinite(dm))
             assert lo <= rep[name][0] and rep[name][3] <= hi, (library, sigma, name, rep[name])
 
-
-def test_bound_nondecreasing_with_depth():
-    pytest.skip("NOT RUN: needs gccap/bound.py (Step 3 module); required before Step 3 results")
+# The required depth-monotonicity test lives in tests/test_bound.py (needs bound.py).

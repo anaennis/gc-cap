@@ -131,3 +131,7 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 ## 2026-10-30 13:47:53 -0700 — Author decisions on P14, P15
 - P14 → **AMENDMENTS A3**: draw caps 5e7 GC / 5e8 per contaminant class per configuration (`frozen.GC_DRAW_CAP`, `frozen.CONT_DRAW_CAP`).
 - P15 → option 1: F4 unchanged. Required GC color test result stands: **mist_miles PASS, padova_c3k FAIL (u−g max 2.58 > 2.2), cause documented**. The test is now marked xfail (strict) for padova_c3k with that reason, so it still runs and is still reported; it would flag if the result ever changed. Step 2 continues.
+2026-10-30T13:53:21-0700 tests job 50357157 on sh02-03n58.int: see logs/tests_50357157.out
+
+## 2026-10-30 — Production GPU type
+- Author decision: every production GPU run uses **`-C GPU_SKU:A100_SXM4`** in `owners` (most common modern type there: 35 nodes; full float64). Jobs are preemptible, so they must be restartable. Confirmed by gpu_check job below.

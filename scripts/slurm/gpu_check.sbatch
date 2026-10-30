@@ -3,16 +3,17 @@
 #SBATCH --partition=owners
 #SBATCH --time=00:15:00
 #SBATCH -G 1
+#SBATCH -C GPU_SKU:A100_SXM4
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=8G
 #SBATCH --requeue
 #SBATCH --output=logs/gpu_check_%j.out
-# Check that the .venv torch wheel runs on a real GPU and record the hardware (HANDOFF §7). No GPU constraint: this is a smoke test, not the production GPU choice.
+# Check that the .venv torch wheel runs on a real GPU and record the hardware (HANDOFF §7). Production GPU type: A100_SXM4 (author, 2026-10-30).
 set -euo pipefail
 cd "$SLURM_SUBMIT_DIR"
 echo "2e50e070598483057f07ee1f2a79bdc780be0324f331cd862f073311285fae11  CRITERIA.md" | sha256sum -c -
 echo "job=$SLURM_JOB_ID node=$(hostname) commit=$(git rev-parse HEAD) date=$(date -Is)"
-ml purge; ml python/3.12.1
+ml purge; ml python/3.12.1 math py-pytorch/2.4.1_py312
 nvidia-smi --query-gpu=name,driver_version,memory.total,compute_cap --format=csv
 lscpu | grep -E "^Model name|^CPU\(s\)"; free -g | head -2
 .venv/bin/python -I - <<'PY'

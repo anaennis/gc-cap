@@ -26,7 +26,8 @@ build() { # name FFLAGS
   $py -m pip install -q --upgrade pip
   # Unpinned, wheels only: pip picks the newest release with a wheel for this glibc (2.17). Laptop lock ignored (author, 2026-10-30).
   # numpy<2 in both venvs: the module torch (fiducial) is built against numpy 1.x and fails with "Numpy is not available" on 2.x.
-  local pkgs="numpy<2 scipy scikit-learn lightgbm pandas pyarrow matplotlib pytest astropy scikit-build-core ninja"
+  local pkgs="numpy<2 scipy scikit-learn lightgbm pandas pyarrow matplotlib pytest astropy scikit-build-core ninja setuptools setuptools_scm"
+  # setuptools_scm: fsps metadata needs it under --no-build-isolation (job 50332340).
   $py -m pip install -q --only-binary=:all: $pkgs
   FFLAGS="$flags" $py -m pip install -v --no-build-isolation "$src" > "logs/pyfsps_${name}_$SLURM_JOB_ID.log" 2>&1
   $py -m pip freeze > "requirements.sherlock.$name.lock"

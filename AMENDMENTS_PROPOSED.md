@@ -87,3 +87,10 @@ These were all resolved by pre-freeze edits to CRITERIA.md, made at the author's
   3. Pin an older FSPS commit that still has BaSeL for the second library. This mixes code versions.
   4. Use §5's declared fallback: library sensitivity "not assessed", and every verdict labelled "conditional on a single SSP library".
 - Because CRITERIA.md is frozen, any of options 1–3 must be recorded in AMENDMENTS.md (timestamp, change, reason, "no results seen").
+
+---
+## P13. torch from the Sherlock module (2.4.1), not ~2.15.0 via pip (raised 2026-10-30, environment build, no results seen)
+- HANDOFF §3.5 asks for torch "closest to 2.15.0" for the node's CUDA. The pip CUDA wheel does not fit: build job 50328971 failed with ENOSPC in `$HOME` (15 GB quota full; `$GROUP_HOME` 99% full).
+- Author chose (2026-10-30) the Sherlock module `py-pytorch/2.4.1_py312` (reports `2.4.0a0`, CUDA 12.6, cuDNN 9.4), exposed to `.venv` through a `.pth` file. Runtime jobs must `ml math py-pytorch/2.4.1_py312`.
+- Consequence: the module torch needs numpy 1.x, so both venvs pin `numpy<2` (laptop lock has numpy 2.4.6). Same pin in both, so the two SSP builds differ only in FSPS flags.
+- Environment-only; no threshold, gate, verdict or simulator parameter changes.

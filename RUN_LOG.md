@@ -120,3 +120,10 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
   - Class ratio 1:34 (and 1:2.6) applied to true i < 24 on the pre-cut populations (A2), via N_gal_pop = 34 · Φ_GCLF(24) / F_counts(24) per GC draw.
 - **GC noise-free color plausibility bounds, declared before any grid exists** (required test; reported, never used to adjust anything): u−g 0.7–2.2, g−r 0.2–1.0, r−i 0.0–0.6, i−z −0.2–0.5, z−y −0.3–0.4.
 - AMENDMENTS_PROPOSED P14: §4.4 per-bin quotas need a draw cap for bins the A2 cut empties. Production test sets wait for the author's decision.
+2026-10-30T13:10:26-0700 build_grids job 50347665 (padova_c3k) on sh04-11n16.int: done (see logs/build_grids_gccap-grids-padova_c3k_50347665.out)
+
+## 2026-10-30 — Step 2 grids and tests (STOPPED: required test fails, see AMENDMENTS_PROPOSED P15)
+- Grid jobs 50347664 (mist_miles) and 50347665 (padova_c3k), kipac, commit abd5515. GC grids (71 [Fe/H] × 7 / 6 ages); galaxy grids (18 × 25 × 60 × 9 × 401 × 6), each about 2.3 GB float32.
+- Fidelity, padova_c3k (2,000 prior draws per class vs direct FSPS; reported, not tuned): GC |Δcolor| max 0.0039 / p99 0.0020 mag (u−g, worst); galaxy median ≤ 0.0006, p99 u−g 0.041, g−r 0.020, r−i 0.009, i−z 0.005, z−y 0.005; max u−g 0.079, g−r 0.068. Full numbers in `results/grids/padova_c3k_fidelity.json`. mist_miles fidelity: still running at time of writing.
+- Test job 50347062: 14 passed, 1 failed (`test_igm`: my unchecked guess "transmission < 0.2 below 900 Å at z = 3"; Madau gives ≈ 0.22. Test replaced by a Lyman-limit drop check, commit after abd5515; the IGM code was not changed).
+- Test job 50351936: 16 passed (incl. required **reproducibility from seed** and **shuffled-label null**), 1 skipped (required **bound non-decreasing with depth: NOT RUN**, needs bound.py), **1 failed: required GC noise-free color range, padova_c3k** (u−g max 2.58 > declared 2.2). mist_miles passed at σ = 0.3 and 0.45. Cause and options in AMENDMENTS_PROPOSED P15. **Step 2 is stopped pending the author** (HANDOFF §8).

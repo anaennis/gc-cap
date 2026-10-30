@@ -102,3 +102,16 @@ These were all resolved by pre-freeze edits to CRITERIA.md, made at the author's
 - Proposal (implementation constant, not a design change): stop drawing a class when every bin meets its quota **or** a fixed draw cap is reached, whichever comes first. Bins short of quota are reported with their actual counts; the gates decide GATED as usual. Suggested caps, fixed before any run: **GC draws ≤ 5 × 10⁷ per configuration; contaminant draws ≤ 5 × 10⁸ per class per configuration.** (Memory and time: about 1 h of interpolation per configuration on one node at those caps; to be measured on the pilot.)
 - Alternative: importance-sample GCs in true magnitude to fill faint bins. Not recommended: CRITERIA/PLAN have GCs unweighted, and it would change the precision estimator.
 - `sample.build_test` takes the caps as arguments; no production test set will be built until the author decides.
+
+---
+## P15. Required test "noise-free GC colors plausible" FAILS for Padova + C3K_LR (raised 2026-10-30, Step 2 pilot test job 50351936; no bound, method or verdict results exist)
+- Test: 200,000 GC draws (pilot seeds) per library and [Fe/H] width; bounds declared in RUN_LOG before any grid existed (u−g 0.7–2.2, g−r 0.2–1.0, r−i 0.0–0.6, i−z −0.2–0.5, z−y −0.3–0.4).
+- **MIST + MILES: PASS** at σ = 0.3 and 0.45 (u−g 0.99–1.97; all colors inside bounds).
+- **Padova + C3K_LR: FAIL** at σ = 0.3: u−g max **2.58** (99.5th pct 1.94). Not yet evaluated at σ = 0.45 (test stops at first failure).
+- Cause (grid inspection, `results/grids/padova_c3k_gc.npz`): Padova2007 isochrones end at Z = 0.03 ([Fe/H] ≈ +0.2) and FSPS clamps them, but C3K_LR spectra extend to +0.5 and are not clamped. Beyond +0.2 the SSP pairs the last isochrone with ever more metal-rich spectra, and u−g climbs from 1.98 (+0.2) to 2.58 (+0.5, 13 Gyr). MIST covers +0.5 and gives ≤ 2.02 there. This is the PLAN ⚑F4 rule ("keep draws, FSPS clamps") doing what it says, not a code bug.
+- Affected: draws with [Fe/H] ≳ +0.3, about 0.2% of GCs at σ = 0.3 and more at σ = 0.45 (lib_padova and corner_a only).
+- Options (author decides; nothing changed):
+  1. Keep F4 as is, accept the test result as a documented model property of the second library, and report the test as FAILED-with-cause.
+  2. Clamp drawn [Fe/H] (for spectra as well as isochrones) to each library's isochrone range, so the SSP is self-consistent. Changes F4.
+  3. Redraw GC [Fe/H] outside the isochrone range (truncates the declared mixture). Changes F4 and the prior.
+- The plausibility bounds themselves are not changed.

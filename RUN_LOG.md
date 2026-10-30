@@ -90,3 +90,10 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 ## 2026-10-30 — Sherlock: fetch job failure and resubmit
 - Fetch job 50322152 failed after 10 s (exit 129). The compute node's system git is 1.8.3.1, which has no `git -C` option. Build job 50322154 was cancelled because its dependency failed. Nothing was fetched.
 - Fix: both job scripts now load `ml system git/2.45.1`. Resubmitted fetch job 50323266, then build job 50323269 (afterok:50323266), both in kipac.
+2026-10-30T10:46:11-0700 fetch_ext job 50323266 on sh02-03n45.int: done (see logs/fetch_ext_50323266.out)
+
+## 2026-10-30 — Sherlock: build job failure and resubmit
+- Build job 50323269 failed after 27 s: pip found no `torch==2.15.0` for Python 3.12 on this platform (newest available 2.6.0; newer wheels need a newer glibc than the cluster's). python-fsps was never built. The libfsps/src swap check had passed.
+- Fix (HANDOFF §3.5, closest available Linux version): torch pinned to **2.6.0** (default PyPI wheel, CUDA 12.4). The driver on the production GPU type must be confirmed to support CUDA 12.4 before production runs (HANDOFF §3.7).
+- Also: modules now load gcc/14.2.0 before python/3.12.1 (Lmod dependency warning).
+- Resubmitted as build job 50325934 (kipac).

@@ -4,3 +4,7 @@ __pycache__/
 *.pyc
 results/raw/
 logs/
+.venv
+.venv-padova
+results/grids/*.npz
+results/grids/*.npy

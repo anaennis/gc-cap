@@ -2,6 +2,16 @@
 
 Written 2026-10-29 at the end of the laptop session (last commit before this file: `0b235a0`). This is for the Claude Code session that continues the work on Stanford's Sherlock cluster. It is self-contained, but the files it points to are authoritative and this file is not.
 
+> **Update 2026-10-30 (Sherlock session 1) — read this first.** Environment built and accepted (§3 done; job 50338921). Step 2 code written and tested; Step 3 `bound.py` written. Details in RUN_LOG.md from "Sherlock env build accepted" onward.
+> - **Open jobs to check** (`sacct -j 50347664,50358339,50359220`):
+>   - 50347664 `gccap-grids-mist_miles` (kipac): MIST grids are built; the 2,000-draw fidelity check was still running. When done, copy its numbers from `logs/build_grids_gccap-grids-mist_miles_50347664.out` / `results/grids/mist_miles_fidelity.json` into RUN_LOG next to padova's, and commit the JSON.
+>   - 50358339 `gccap-gpucheck` (owners, A100_SXM4): confirms torch module on the production GPU; log hardware line in RUN_LOG (§3.7).
+>   - 50359220 `gccap-tests` (owners, A100): full suite incl. the **required depth-monotonicity test** (`tests/test_bound.py`). If it fails for a non-bug reason, stop and ask (§8).
+> - Author decisions this session: kipac/owners only; production GPU `-C GPU_SKU:A100_SXM4`; AMENDMENTS A3 (draw caps, from P14); P15 option 1 (Padova GC u−g tail accepted, test strict-xfail).
+> - Grids (`results/grids/*.npz`, ~2.3 GB each) are git-ignored; rebuild with `scripts/slurm/build_grids.sbatch <library>`.
+> - Next: after the tests pass, pilot throughput for the bound (log it), GBDT cross-check (`methods`), TRILEGAL fetch for arm S (log in DATA_LOG first), then the fiducial bound and the validity gate.
+> - Session rules unchanged: read /etc/agents/AGENTS.md at session start; never push (the author pushes).
+
 ## 1. Read first, in this order
 1. `PHASE1_PROMPT.md`: the author's original instructions, verbatim. The hard rules there bind you.
 2. `CRITERIA.md`: the frozen design. **Never edit it.** sha256 must be `2e50e070598483057f07ee1f2a79bdc780be0324f331cd862f073311285fae11`. Check it before any compute and refuse to run if it differs.

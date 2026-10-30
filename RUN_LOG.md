@@ -135,3 +135,7 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 
 ## 2026-10-30 — Production GPU type
 - Author decision: every production GPU run uses **`-C GPU_SKU:A100_SXM4`** in `owners` (most common modern type there: 35 nodes; full float64). Jobs are preemptible, so they must be restartable. Confirmed by gpu_check job below.
+
+## 2026-10-30 — End of Sherlock session 1
+- Step 3 started: `gccap/bound.py` (commit 69d6edc). Arm S bound raises NotImplementedError until the TRILEGAL bank exists.
+- Jobs still open at session end: 50347664 (mist_miles fidelity, running), 50358339 (A100 gpu_check, pending), 50359220 (test suite incl. required depth test, A100, pending). Results not yet seen; see HANDOFF.md update box.

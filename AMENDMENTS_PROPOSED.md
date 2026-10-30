@@ -115,3 +115,5 @@ These were all resolved by pre-freeze edits to CRITERIA.md, made at the author's
   2. Clamp drawn [Fe/H] (for spectra as well as isochrones) to each library's isochrone range, so the SSP is self-consistent. Changes F4.
   3. Redraw GC [Fe/H] outside the isochrone range (truncates the declared mixture). Changes F4 and the prior.
 - The plausibility bounds themselves are not changed.
+
+**Resolutions (author, 2026-10-30 13:47:53 -0700):** P14 → AMENDMENTS.md A3 (caps as proposed). P15 → option 1: keep PLAN ⚑F4 unchanged; the Padova GC color test is reported as FAILED with its documented cause (model property of the second library), and does not block Step 3. Bounds unchanged.

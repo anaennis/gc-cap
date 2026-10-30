@@ -164,3 +164,7 @@ def m5(config):
 
 def test_gc_per_bin(config_id):
     return TEST_GC_PER_BIN_FIDUCIAL if config_id == "fiducial" else TEST_GC_PER_BIN_OTHER
+
+# --- AMENDMENTS A3: test-set draw caps (§4.4 stopping rule) ---------------------------------------
+GC_DRAW_CAP = 50_000_000  # per configuration
+CONT_DRAW_CAP = 500_000_000  # per contaminant class per configuration

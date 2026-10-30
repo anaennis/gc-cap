@@ -24,3 +24,11 @@ Changes to the frozen CRITERIA.md (commit bd254ba). Each entry gives a timestamp
 - **Why:** CRITERIA has no detection rule, and at SV depth many simulated faint sources would have non-positive fluxes, leaving magnitudes and colors undefined. The paper's cut is citable and keeps the replication setup comparable.
 - **Results seen:** **None.** No simulation or compute had run.
 - **Effect on other rules:** none. Thresholds, gates and verdict rules are unchanged.
+
+## A3 — Draw caps for per-bin quotas (fills a gap in §4.4)
+- **Timestamp:** 2026-10-30 13:47:53 -0700
+- **Decided by:** the author, from AMENDMENTS_PROPOSED.md P14.
+- **Change:** when building a test set, each class is drawn until every observed-i bin meets its quota (§4.4) **or** a fixed draw cap is reached, whichever comes first: **GC draws ≤ 5 × 10⁷ per configuration; contaminant draws ≤ 5 × 10⁸ per contaminant class per configuration.** Bins short of quota are reported with their actual counts; the §8 gates decide GATED as usual.
+- **Why:** §4.4 has no stopping rule, and bins the A2 cut nearly empties would otherwise need unbounded draws.
+- **Results seen:** pilot/test-suite results and grid fidelity numbers only (RUN_LOG 2026-10-30). **No test sets, bound, method or verdict results existed.**
+- **Effect on other rules:** none. Thresholds, gates and verdict rules are unchanged.

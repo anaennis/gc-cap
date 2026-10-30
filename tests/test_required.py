@@ -17,7 +17,13 @@ from gccap.seeds import rng
 PLAUSIBLE = {"u-g": (0.7, 2.2), "g-r": (0.2, 1.0), "r-i": (0.0, 0.6), "i-z": (-0.2, 0.5), "z-y": (-0.3, 0.4)}
 
 
-@pytest.mark.parametrize("library", list(F.LIBRARIES))
+# padova_c3k fails (u-g max 2.58): Padova isochrones clamp at Z=0.03 while C3K spectra do not (PLAN F4).
+# Author accepted this as a documented model property (AMENDMENTS_PROPOSED P15, option 1). Strict xfail keeps it
+# reported and flags any change.
+P15 = pytest.mark.xfail(strict=True, reason="P15: Padova isochrone clamp vs C3K spectra, accepted by author")
+
+
+@pytest.mark.parametrize("library", [pytest.param(k, marks=P15) if k == "padova_c3k" else k for k in F.LIBRARIES])
 def test_gc_noise_free_color_range(library, record_property):
     if not grid_path(library, "gc").exists():
         pytest.skip(f"{library} GC grid not built")

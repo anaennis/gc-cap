@@ -82,3 +82,7 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Author decision: use the Sherlock module `python/3.12.1` (not 3.11). No results were produced on the laptop, so nothing has to match it. Toolchain modules: gcc/14.2.0, cmake/3.31.4. Venvs: stdlib `venv` + pip, no uv.
 - To fit `$HOME` (~5.5 GB free), torch is installed only in the fiducial venv. `.venv-padova` only builds the second SSP grid and gets the lock minus torch and its dependencies. Each venv's pins are written to `requirements.sherlock.<name>.lock`.
 - Build job 50193601 (`scripts/slurm/build_env.sbatch`), which runs after fetch job 50193512 succeeds.
+
+## 2026-10-30 — Sherlock: jobs moved to kipac
+- Author decision: run on the `kipac` partition instead of `normal`. Jobs 50193512/50193601 had been pending on priority in `normal` for about 23 h and never ran, so they were cancelled.
+- Resubmitted: fetch job 50322152, then build job 50322154 (afterok:50322152). Both are in `kipac`.

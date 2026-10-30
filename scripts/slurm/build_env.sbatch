@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=gccap-build
-#SBATCH --partition=normal
+#SBATCH --partition=kipac
 #SBATCH --time=02:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=16G

@@ -101,3 +101,4 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 ## 2026-10-30 — Sherlock env build: laptop lock dropped
 - Build jobs 50323269 and 50325934 FAILED. pip had no glibc-2.17 wheels for numpy 2.4.6 / pandas 3.1.0, so it fell back to compiling them from source, and the system assembler rejected `endbr64`.
 - Author decision (2026-10-30): nothing was ever run in the laptop environment, so ignore `requirements.lock`. Install unpinned with `--only-binary=:all:` on python/3.12.1. There is no 3.11 module, so this departs from HANDOFF §3.1. The exact Sherlock versions are recorded in `requirements.sherlock.{fiducial,padova}.lock`. Also install fsps with `--no-build-isolation`.
+2026-10-30T12:27:05-0700 build_env job 50338921 on sh02-03n48.int: done (see logs/build_env_50338921.out)

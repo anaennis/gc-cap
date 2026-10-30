@@ -46,7 +46,8 @@ def test_igm():
     assert np.all(photometry.igm_transmission(lam, 0.0) == 1.0)
     t = photometry.igm_transmission(lam, 3.0)
     assert np.all(t[lam > 1216] == 1.0) and t[(lam > 1100) & (lam < 1200)].max() < 1.0
-    assert t[lam < 900].max() < 0.2
+    # Lyman-continuum absorption: transmission drops across 911.75 Å (Madau 1995 gives ~e^-1.5 at z=3)
+    assert t[lam < 900].max() < t[(lam > 912) & (lam < 1000)].min()
 
 
 def test_grid_interp_exact_for_multilinear():

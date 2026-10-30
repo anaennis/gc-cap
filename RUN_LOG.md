@@ -102,3 +102,10 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Build jobs 50323269 and 50325934 FAILED. pip had no glibc-2.17 wheels for numpy 2.4.6 / pandas 3.1.0, so it fell back to compiling them from source, and the system assembler rejected `endbr64`.
 - Author decision (2026-10-30): nothing was ever run in the laptop environment, so ignore `requirements.lock`. Install unpinned with `--only-binary=:all:` on python/3.12.1. There is no 3.11 module, so this departs from HANDOFF §3.1. The exact Sherlock versions are recorded in `requirements.sherlock.{fiducial,padova}.lock`. Also install fsps with `--no-build-isolation`.
 2026-10-30T12:27:05-0700 build_env job 50338921 on sh02-03n48.int: done (see logs/build_env_50338921.out)
+
+## 2026-10-30 — Sherlock env build accepted
+- Build job 50332340 FAILED: fsps metadata needs `setuptools_scm` under `--no-build-isolation`. Added `setuptools setuptools_scm` to the wheel install; resubmitted as 50338921.
+- Build job 50338921 (sh02-03n48) passed the HANDOFF §3.6 acceptance check, matching the laptop exactly: `.venv` libraries (mist, miles, DL07), 5994 wavelengths 91 Å–1e8 Å, 13 Z 5.85e-5–0.0585; `.venv-padova` (pdva, c3k_lr, DL07), 1936 wavelengths 100 Å–1e8 Å, 22 Z 2e-4–0.03; nebular emission finite in both. **Nebular emission is available in both builds** (CRITERIA §4.3).
+- Fiducial venv torch: Sherlock module py-pytorch/2.4.1_py312 (reports `2.4.0a0`, CUDA 12.6), numpy 1.26.3. Jobs using `.venv` must `ml math py-pytorch/2.4.1_py312`.
+- **Platform decision (author, 2026-10-29):** Steps 2–5, including both grid builds, run on Sherlock; every production result comes from this one platform.
+- **Device (HANDOFF §4):** PLAN §3 "torch on MPS" means CUDA on Sherlock. Implementation detail, not a design change. Code is device-agnostic (cuda → mps → cpu).

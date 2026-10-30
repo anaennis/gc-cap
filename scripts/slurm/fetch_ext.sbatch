@@ -10,6 +10,7 @@ set -euo pipefail
 cd "$SLURM_SUBMIT_DIR"
 echo "2e50e070598483057f07ee1f2a79bdc780be0324f331cd862f073311285fae11  CRITERIA.md" | sha256sum -c -
 echo "job=$SLURM_JOB_ID node=$(hostname) commit=$(git rev-parse HEAD) date=$(date -Is)"
+ml system git/2.45.1; git --version
 mkdir -p ext/sdist
 
 git init -q ext/fsps

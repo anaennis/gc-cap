@@ -86,3 +86,7 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 ## 2026-10-30 — Sherlock: jobs moved to kipac
 - Author decision: run on the `kipac` partition instead of `normal`. Jobs 50193512/50193601 had been pending on priority in `normal` for about 23 h and never ran, so they were cancelled.
 - Resubmitted: fetch job 50322152, then build job 50322154 (afterok:50322152). Both are in `kipac`.
+
+## 2026-10-30 — Sherlock: fetch job failure and resubmit
+- Fetch job 50322152 failed after 10 s (exit 129). The compute node's system git is 1.8.3.1, which has no `git -C` option. Build job 50322154 was cancelled because its dependency failed. Nothing was fetched.
+- Fix: both job scripts now load `ml system git/2.45.1`. Resubmitted fetch job 50323266, then build job 50323269 (afterok:50323266), both in kipac.

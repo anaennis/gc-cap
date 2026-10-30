@@ -10,7 +10,7 @@ set -euo pipefail
 cd "$SLURM_SUBMIT_DIR"
 echo "2e50e070598483057f07ee1f2a79bdc780be0324f331cd862f073311285fae11  CRITERIA.md" | sha256sum -c -
 echo "job=$SLURM_JOB_ID node=$(hostname) commit=$(git rev-parse HEAD) date=$(date -Is)"
-ml purge; ml python/3.12.1 gcc/14.2.0 cmake/3.31.4
+ml purge; ml system git/2.45.1 python/3.12.1 gcc/14.2.0 cmake/3.31.4
 ml -t list 2>&1
 export SPS_HOME="$PWD/ext/fsps" PIP_NO_CACHE_DIR=1 MAKEFLAGS=-j$SLURM_CPUS_PER_TASK
 test "$(git -C ext/fsps rev-parse HEAD)" = b6600ff3a983e0c35ec722e961dfdc89c97c37f2

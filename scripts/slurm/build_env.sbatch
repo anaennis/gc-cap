@@ -21,16 +21,14 @@ build() { # name FFLAGS with_torch
   mkdir -p "$src"; tar -xzf ext/sdist/fsps-0.5.0.tar.gz -C "$src" --strip-components=1
   rm -rf "$src/src/fsps/libfsps/src"; cp -r ext/fsps/src "$src/src/fsps/libfsps/src"
   diff -r "$src/src/fsps/libfsps/src" ext/fsps/src && echo "$name: libfsps/src == ext/fsps/src"
-  python3 -m venv "$VROOT/$name"
+  rm -rf "$VROOT/$name"; python3 -m venv "$VROOT/$name"
   local py="$VROOT/$name/bin/python"
   $py -m pip install -q --upgrade pip
-  if [ "$torch" = yes ]; then grep -v '^torch==' requirements.lock > "$L_SCRATCH_JOB/req.txt"
-    $py -m pip install -q -r "$L_SCRATCH_JOB/req.txt" torch==2.6.0 astropy
-  else grep -vE '^(torch|sympy|mpmath|networkx|jinja2|markupsafe|fsspec|filelock)==' requirements.lock > "$L_SCRATCH_JOB/req.txt"
-    $py -m pip install -q -r "$L_SCRATCH_JOB/req.txt" astropy
-  fi
-  FFLAGS="$flags" $py -m pip install -q --no-build-isolation scikit-build-core 2>/dev/null || true
-  FFLAGS="$flags" $py -m pip install -v "$src" > "logs/pyfsps_${name}_$SLURM_JOB_ID.log" 2>&1
+  # Unpinned, wheels only: pip picks the newest release with a wheel for this glibc (2.17). Laptop lock ignored (author, 2026-10-30).
+  local pkgs="numpy scipy scikit-learn lightgbm pandas pyarrow matplotlib pytest astropy scikit-build-core ninja"
+  [ "$torch" = yes ] && pkgs="$pkgs torch"
+  $py -m pip install -q --only-binary=:all: $pkgs
+  FFLAGS="$flags" $py -m pip install -v --no-build-isolation "$src" > "logs/pyfsps_${name}_$SLURM_JOB_ID.log" 2>&1
   $py -m pip freeze > "requirements.sherlock.$name.lock"
 }
 build fiducial "-DMIST=1 -DC3K_LR=0 -DMILES=1" yes

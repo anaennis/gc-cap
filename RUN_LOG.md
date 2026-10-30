@@ -97,3 +97,7 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Fix (HANDOFF §3.5, closest available Linux version): torch pinned to **2.6.0** (default PyPI wheel, CUDA 12.4). The driver on the production GPU type must be confirmed to support CUDA 12.4 before production runs (HANDOFF §3.7).
 - Also: modules now load gcc/14.2.0 before python/3.12.1 (Lmod dependency warning).
 - Resubmitted as build job 50325934 (kipac).
+
+## 2026-10-30 — Sherlock env build: laptop lock dropped
+- Build jobs 50323269 and 50325934 FAILED. pip had no glibc-2.17 wheels for numpy 2.4.6 / pandas 3.1.0, so it fell back to compiling them from source, and the system assembler rejected `endbr64`.
+- Author decision (2026-10-30): nothing was ever run in the laptop environment, so ignore `requirements.lock`. Install unpinned with `--only-binary=:all:` on python/3.12.1. There is no 3.11 module, so this departs from HANDOFF §3.1. The exact Sherlock versions are recorded in `requirements.sherlock.{fiducial,padova}.lock`. Also install fsps with `--no-build-isolation`.

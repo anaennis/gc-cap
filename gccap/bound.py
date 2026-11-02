@@ -14,7 +14,8 @@ Set B: color errors rise strictly with m_i at fixed colors, so f ↔ x_B is one-
 Set A: p(c, bin | class) = ∫_bin p(f(c, m)) |J(c, m)| 1[A2 cut] dm over observed i, by Gauss–Legendre
        (24 nodes per 1-mag sub-interval). Open bins use declared finite ranges (A_RANGE_*).
 
-Latent sums are pruned to latents whose true i flux can lie within 7 s of the observed i flux, and
+Latent sums are pruned to latents whose true i flux can lie within 7 s of the observed i flux (widened per
+object when the pruned mass could matter; see Likelihood.logp), and
 accumulated with streaming log-sum-exp in float64 on the best available device (cuda → mps → cpu).
 """
 import math
@@ -115,37 +116,57 @@ class Likelihood:
         self.sbg_i = float(sigma_bg(m5)[F.I_BAND])
         self.lat_chunk = lat_chunk
 
-    def window(self, fi_lo, fi_hi):
-        """Latent index range whose true i flux can be within N_SIGMA s of [fi_lo, fi_hi]."""
-        lo = (fi_lo - N_SIGMA * self.sbg_i) / (1 + N_SIGMA * KAPPA)
-        hi = (fi_hi + N_SIGMA * self.sbg_i) / (1 - N_SIGMA * KAPPA)
+    def window(self, fi_lo, fi_hi, n_sigma=N_SIGMA):
+        """Latent index range whose true i flux can be within n_sigma s of [fi_lo, fi_hi]."""
+        lo = (fi_lo - n_sigma * self.sbg_i) / (1 + n_sigma * KAPPA)
+        if n_sigma * KAPPA >= 1:
+            return int(np.searchsorted(self.bank.Fi, lo, "left")), self.bank.Fi.size
+        hi = (fi_hi + n_sigma * self.sbg_i) / (1 - n_sigma * KAPPA)
         return int(np.searchsorted(self.bank.Fi, lo, "left")), int(np.searchsorted(self.bank.Fi, hi, "right"))
 
-    def logp(self, f, obj_chunk=512):
-        """log p(f | class) and the effective sample size of the latent terms, for f[N, 6] (numpy)."""
+    def _accumulate(self, f_rows, n_sigma):
+        fc = torch.as_tensor(f_rows, dtype=torch.float64, device=self.dev)
+        a, b = self.window(f_rows[:, F.I_BAND].min(), f_rows[:, F.I_BAND].max(), n_sigma)
+        n = f_rows.shape[0]
+        m = torch.full((n,), -math.inf, dtype=torch.float64, device=self.dev)
+        s1 = torch.zeros(n, dtype=torch.float64, device=self.dev)
+        s2 = torch.zeros_like(s1)
+        for c in range(a, b, self.lat_chunk):
+            e = min(b, c + self.lat_chunk)
+            z = (fc[:, None, :] - self.F[None, c:e]) * self.inv_s[None, c:e]
+            ll = self.log_norm[None, c:e] - 0.5 * (z * z).sum(-1)
+            mc = torch.maximum(m, ll.max(1).values)
+            fin = torch.isfinite(mc)
+            scale = torch.where(fin, torch.exp(m - mc), torch.zeros_like(m))
+            ex = torch.exp(ll - torch.where(fin, mc, torch.zeros_like(mc))[:, None])
+            s1 = s1 * scale + ex.sum(1)
+            s2 = s2 * scale**2 + (ex * ex).sum(1)
+            m = mc
+        return (m + torch.log(s1)).cpu().numpy(), (s1**2 / s2).cpu().numpy(), (a, b)
+
+    def logp(self, f, obj_chunk=512, log_tol=-16.0):
+        """log p(f | class) and the effective sample size of the latent terms, for f[N, 6] (numpy).
+
+        A latent outside the n_sigma window has log term ≤ max(log_norm) − n_sigma²/2, so the pruned mass is
+        at most exp(log(L) + max(log_norm) − n_sigma²/2). An object whose in-window log p does not exceed
+        that by −log_tol (relative error < e^-16) is recomputed with the n_sigma that guarantees it.
+        """
         f = np.asarray(f, dtype=np.float64)
         o = np.argsort(f[:, F.I_BAND])
         out, ess = np.full(f.shape[0], -np.inf), np.zeros(f.shape[0])
+        L = self.bank.Fi.size
+        ln_max = float(self.log_norm.max()) + math.log(L)
+        need = np.zeros(f.shape[0])
         for s in range(0, f.shape[0], obj_chunk):
             idx = o[s:s + obj_chunk]
-            fc = torch.as_tensor(f[idx], dtype=torch.float64, device=self.dev)
-            a, b = self.window(f[idx, F.I_BAND].min(), f[idx, F.I_BAND].max())
-            m = torch.full((idx.size,), -math.inf, dtype=torch.float64, device=self.dev)
-            s1 = torch.zeros(idx.size, dtype=torch.float64, device=self.dev)
-            s2 = torch.zeros_like(s1)
-            for c in range(a, b, self.lat_chunk):
-                e = min(b, c + self.lat_chunk)
-                z = (fc[:, None, :] - self.F[None, c:e]) * self.inv_s[None, c:e]
-                ll = self.log_norm[None, c:e] - 0.5 * (z * z).sum(-1)
-                mc = torch.maximum(m, ll.max(1).values)
-                fin = torch.isfinite(mc)
-                scale = torch.where(fin, torch.exp(m - mc), torch.zeros_like(m))
-                ex = torch.exp(ll - torch.where(fin, mc, torch.zeros_like(mc))[:, None])
-                s1 = s1 * scale + ex.sum(1)
-                s2 = s2 * scale**2 + (ex * ex).sum(1)
-                m = mc
-            out[idx] = (m + torch.log(s1)).cpu().numpy()
-            ess[idx] = (s1**2 / s2).cpu().numpy()
+            out[idx], ess[idx], (a, b) = self._accumulate(f[idx], N_SIGMA)
+            if a > 0 or b < L:
+                req = np.sqrt(np.maximum(2.0 * (ln_max - out[idx] - log_tol), 0.0))
+                need[idx] = np.where(req > N_SIGMA, req, 0.0)
+        redo = o[need[o] > 0]  # still sorted by i flux
+        for s in range(0, redo.size, obj_chunk):
+            idx = redo[s:s + obj_chunk]
+            out[idx], ess[idx], _ = self._accumulate(f[idx], float(need[idx].max()))
         return out, ess
 
 

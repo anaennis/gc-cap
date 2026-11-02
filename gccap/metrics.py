@@ -18,6 +18,8 @@ def _operating(gc_s, w_s, sc_s, c, counts=None):
     cnt = np.ones(gc_s.size) if counts is None else counts
     ngc = cnt * gc_s
     cum_gc = np.cumsum(ngc)
+    if cum_gc.size == 0 or cum_gc[-1] == 0:  # empty cell (or no GCs in a resample)
+        return np.nan, 0, 0
     k = int(np.ceil(c * cum_gc[-1]))
     if k == 0:
         return np.nan, 0, 0
@@ -52,6 +54,8 @@ def bootstrap_counts(seed_seq, n, n_boot=F.N_BOOT):
 def bootstrap_precision(score, is_gc, weight, c, seed_seq, n_boot=F.N_BOOT):
     o = np.argsort(-np.asarray(score), kind="stable")
     gc_s, w_s, sc_s = np.asarray(is_gc, bool)[o], np.asarray(weight, np.float64)[o], np.asarray(score)[o]
+    if o.size == 0:
+        return np.full(n_boot, np.nan)
     return np.array([_operating(gc_s, w_s, sc_s, c, cnt[o])[0]
                      for cnt in bootstrap_counts(seed_seq, o.size, n_boot)])
 

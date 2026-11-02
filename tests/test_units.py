@@ -155,3 +155,9 @@ def test_precision_at_known():
     w = np.array([1, 2, 1, 2, 1.0])
     p, tp, fp = metrics.precision_at(score, is_gc, w, 0.5)  # 2 of 3 GCs -> rows 0..2
     assert (tp, fp) == (2, 1) and abs(p - 2 / 4) < 1e-12
+
+
+def test_precision_empty_cell():
+    from gccap import metrics
+    assert metrics.precision_at([], [], [], 0.5)[1:] == (0, 0)
+    assert np.isnan(metrics.precision_at([1.0, 2.0], [False, False], [1.0, 1.0], 0.5)[0])

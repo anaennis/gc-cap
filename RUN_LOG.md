@@ -139,3 +139,13 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 ## 2026-10-30 — End of Sherlock session 1
 - Step 3 started: `gccap/bound.py` (commit 69d6edc). Arm S bound raises NotImplementedError until the TRILEGAL bank exists.
 - Jobs still open at session end: 50347664 (mist_miles fidelity, running), 50358339 (A100 gpu_check, pending), 50359220 (test suite incl. required depth test, A100, pending). Results not yet seen; see HANDOFF.md update box.
+2026-10-30T15:14:43-0700 gpu_check job 50358339 on sh03-16n09.int: done (see logs/gpu_check_50358339.out)
+2026-10-30T17:28:24-0700 build_grids job 50347664 (mist_miles) on sh04-11n16.int: done (see logs/build_grids_gccap-grids-mist_miles_50347664.out)
+
+## 2026-11-02 — Sherlock session 2
+- AGENTS.md re-read; CRITERIA sha256 OK.
+- Fidelity, mist_miles (job 50347664, 2,000 prior draws per class vs direct FSPS; reported, not tuned): GC |Δcolor| max 0.0113 (u−g) / p99 ≤ 0.0014 / median ≤ 0.0003 mag; galaxy median ≤ 0.0007, p99 u−g 0.036, g−r 0.017, r−i 0.016, i−z 0.014, z−y 0.024; max u−g 0.128, g−r 0.078, r−i 0.065, i−z 0.063, z−y 0.056. No non-finite values. Full numbers in `results/grids/mist_miles_fidelity.json`.
+- GPU check (job 50358339, sh03-16n09): NVIDIA A100-SXM4-80GB, driver 550.163.01, 81920 MiB, capability 8.0; torch sees it.
+- Test suite (job 50359220, commit 267acee): 2 failed, 18 passed, 1 xfailed. Both failures are bugs, fixed:
+  1. `test_logp_matches_brute_force`: the fixed 7σ i-flux window dropped dominant latents for objects poorly fitted by every in-window latent (e.g. −997.4 vs brute-force −920.4). The "< e^-24 lost" argument held only relative to the per-entry i term, not the total. Fix: `Likelihood.logp` bounds the pruned mass by log L + max(log_norm) − n_σ²/2 and recomputes any object whose in-window log p fails to exceed that by 16 nats, using the n_σ that guarantees it. Same quantity, now exact to < e^-16 relative.
+  2. `test_bound_nondecreasing_with_depth` (required): crashed with IndexError in `metrics._operating` on an empty bin, before testing anything. Empty and sparse bins are expected (A2, CRITERIA §4.5). Fix: empty cells and resamples with no GCs return (nan, 0, 0); `bootstrap_precision` returns NaNs for empty cells. Added `test_precision_empty_cell`.

@@ -12,6 +12,8 @@ Written 2026-10-29 at the end of the laptop session (last commit before this fil
 > - Next: after the tests pass, pilot throughput for the bound (log it), GBDT cross-check (`methods`), TRILEGAL fetch for arm S (log in DATA_LOG first), then the fiducial bound and the validity gate.
 > - Session rules unchanged: read /etc/agents/AGENTS.md at session start; never push (the author pushes).
 
+> **Update 2026-11-02 (session 2).** 50347664 and 50358339 logged in RUN_LOG. 50359220 failed on 2 bugs (logp pruning, empty-bin metrics), now fixed in 0444774. The rerun is **job 50800396** (`sacct -j 50800396`; log `logs/tests_50800396.out`). Record its result in RUN_LOG. Proceed to the throughput pilot only if every required test passes.
+
 ## 1. Read first, in this order
 1. `PHASE1_PROMPT.md`: the author's original instructions, verbatim. The hard rules there bind you.
 2. `CRITERIA.md`: the frozen design. **Never edit it.** sha256 must be `2e50e070598483057f07ee1f2a79bdc780be0324f331cd862f073311285fae11`. Check it before any compute and refuse to run if it differs.

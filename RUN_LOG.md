@@ -149,3 +149,9 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - Test suite (job 50359220, commit 267acee): 2 failed, 18 passed, 1 xfailed. Both failures are bugs, fixed:
   1. `test_logp_matches_brute_force`: the fixed 7σ i-flux window dropped dominant latents for objects poorly fitted by every in-window latent (e.g. −997.4 vs brute-force −920.4). The "< e^-24 lost" argument held only relative to the per-entry i term, not the total. Fix: `Likelihood.logp` bounds the pruned mass by log L + max(log_norm) − n_σ²/2 and recomputes any object whose in-window log p fails to exceed that by 16 nats, using the n_σ that guarantees it. Same quantity, now exact to < e^-16 relative.
   2. `test_bound_nondecreasing_with_depth` (required): crashed with IndexError in `metrics._operating` on an empty bin, before testing anything. Empty and sparse bins are expected (A2, CRITERIA §4.5). Fix: empty cells and resamples with no GCs return (nan, 0, 0); `bootstrap_precision` returns NaNs for empty cells. Added `test_precision_empty_cell`.
+2026-11-03T07:19:17-0800 tests job 50800396 on sh03-18n07.int: see logs/tests_50800396.out
+
+## 2026-11-03 — Sherlock session 3
+- AGENTS.md re-read; CRITERIA sha256 OK.
+- Test suite (job 50800396, sh03-18n07, commit 0444774): **21 passed, 1 xfailed** (padova_c3k GC u−g, strict-xfail per P15). All required tests pass: reproducibility from seed, shuffled-label null, noise-free GC color range (mist_miles PASS; padova_c3k FAIL as documented), **bound non-decreasing with depth PASS**. One RuntimeWarning (NaN in `Likelihood.window` for empty pilot cells; expected sparse/empty faint bins, cells with TP < 1,000 not checked). Step 2 complete.
+- Throughput pilot submitted (`scripts/pilot_throughput.py`, fiducial, production bank sizes 1e6/4e6, seed keys (pilot_throughput, pilot, 41/42)); output to logs/ only.

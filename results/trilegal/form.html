@@ -1,0 +1,139 @@
+
+
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	 "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>TRILEGAL 1.6 input form</title>
+<link rev="made" href="mailto:L%26eacute%3Bo%20Girardi">
+<base href="https://stev.oapd.inaf.it/cgi-bin/trilegal">
+<meta name="robots" content="noarchive">
+<link rel="stylesheet" type="text/css" href="../~webmaster/trilegal_1.6/form.css">
+<script src="../~webmaster/trilegal_1.6/validateMinMax.js" type="text/javascript"></script>
+</head>
+<body icon="HASH(0x558f549963d8)">
+<link rel='icon' href='../~webmaster/trilegal_1.6/smallicon.png' type='image/x-icon'><link rel='shortcut icon' href='../~webmaster/trilegal_1.6/smallicon.png' type='image/x-icon'><center><h1>TRILEGAL 1.6 input form</h1></center><p class="smallwarning"><font size=+2><u>Warning!</u> (17mar13) We are forced to limit the maximum CPU time to 10 min. If this is too short, please split your simulation into smaller areas. </font><p><u>New version!</u> (10Sep12) v1.6 becomes the default. It's the result of correcting some bugs in the central disk densities (for thin and thick disks), and then recalibrating their parameters. A provisional description of these changes is in <a href='http://adsabs.harvard.edu/abs/2012rgps.book..165G'>this paper</a>. Changes are not dramatic but are in the sense of improving agreeent with data. The previous version is still available in <a href='./trilegal_1.5'>v1.5</a>. <br><font size=-1></font></p><form method="post" action="./trilegal_1.6" enctype="multipart/form-data"><p><div align='center'><hr><font size=+1><a href="../~webmaster/trilegal_1.6/help.html" target="aside">Help</a> <a href="../~webmaster/trilegal_1.6/faq.html" target="aside">FAQ</a> <a href="../~webmaster/trilegal_1.6/papers.html" target="aside">Papers</a> <a href="../~webmaster/trilegal_1.6/people.html" target="aside">People</a> <a href="../~webmaster/trilegal_1.6/history.html" target="aside">History</a> <p><input type="submit" name="submit_form" value="Submit" > <input type="submit" name="reset_form" value="Reset" ></font> <hr><input type="hidden" name="trilegal_version" value="1.6" ><fieldset title='Pointing parameters'><legend title='Pointing parameters'>Pointing parameters</legend>Using Epoch 2000, decimal numbers:<br><input type="radio" name="gal_coord" value="1" checked >Galactic coordinates centered on <i>l</i> = <input type="text" name="gc_l" value="0" size="8"> deg, <i>b</i> = <input type="text" name="gc_b" value="90" size="8"> deg <br><input type="radio" name="gal_coord" value="2" >Equatorial coordinates centered on &alpha; = <input type="text" name="eq_alpha" value="0" size="8"> h, &delta; = <input type="text" name="eq_delta" value="0" size="8"> deg <br>Total field area =<input type="text" name="field" value="1" size="8" onblur="validateMinMax(this,0,10)"> deg&sup2; (max=10 deg&sup2)</fieldset><fieldset title='Select the photometric system'><legend title='Photometric system'>Photometric system</legend><font size=-1>Bolometric corrections are computed as in Girardi et al. 2002.</font> <br>Available systems: <select name="photsys_file" >
+<option value="tab_mag_odfnew/tab_mag_.dat"></option>
+<option value="tab_mag_odfnew/tab_mag_2mass_spitzer.dat"> 2MASS + Spitzer (IRAC+MIPS)</option>
+<option value="tab_mag_odfnew/tab_mag_2mass_spitzer_wise.dat"> 2MASS + Spitzer (IRAC+MIPS) + WISE</option>
+<option value="tab_mag_odfnew/tab_mag_2mass.dat"> 2MASS <i>JHK</i><sub>s</sub></option>
+<option value="tab_mag_odfnew/tab_mag_ogle_2mass_spitzer.dat"> OGLE + 2MASS + Spitzer (IRAC+MIPS)</option>
+<option selected value="tab_mag_odfnew/tab_mag_ubvrijhk.dat"><i>UBVRIJHK</i> (cf. Maiz-Apellaniz 2006 + Bessell 1990)</option>
+<option value="tab_mag_odfnew/tab_mag_bessell.dat"><i>UBVRIJHKLMN</i> (cf. Bessell 1990 + Bessell & Brett 1988)</option>
+<option value="tab_mag_odfnew/tab_mag_akari.dat">AKARI</option>
+<option value="tab_mag_odfnew/tab_mag_batc.dat">BATC</option>
+<option value="tab_mag_odfnew/tab_mag_megacam_wircam.dat">CFHT Megacam + Wircam (all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_wircam.dat">CFHT Wircam</option>
+<option value="tab_mag_odfnew/tab_mag_megacam_post2014.dat">CFHT/Megacam post-2014 <i>u*g'r'i'z'</i></option>
+<option value="tab_mag_odfnew/tab_mag_megacam.dat">CFHT/Megacam pre-2014 <i>u*g'r'i'z'</i></option>
+<option value="tab_mag_odfnew/tab_mag_ciber.dat">CIBER</option>
+<option value="tab_mag_odfnew/tab_mag_ciber2.dat">CIBER-2 (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_clue_galex.dat">CLUE + GALEX (Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_CSST.dat">CSST (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_decam.dat">DECAM (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_denis.dat">DENIS</option>
+<option value="tab_mag_odfnew/tab_mag_dmc14.dat">DMC 14 filters</option>
+<option value="tab_mag_odfnew/tab_mag_dmc15.dat">DMC 15 filters</option>
+<option value="tab_mag_odfnew/tab_mag_eis.dat">ESO/EIS (WFI <i>UBVRIZ</i> + SOFI <i>JHK</i>)</option>
+<option value="tab_mag_odfnew/tab_mag_wfi.dat">ESO/WFI</option>
+<option value="tab_mag_odfnew/tab_mag_wfi2.dat">ESO/WFI2</option>
+<option value="tab_mag_odfnew/tab_mag_euclid_nisp.dat">Euclid VIS+NISP (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_galex_sloan.dat">GALEX FUV+NUV (Vegamag) + SDSS <i>ugriz</i> (ABmags) </option>
+<option value="tab_mag_odfnew/tab_mag_galex.dat">GALEX FUV+NUV + Johnson's UBV (Maiz-Apellaniz version), all Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_gaia_tycho2_2mass.dat">Gaia DR1 + Tycho2 + 2MASS (all Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_gaiaDR2_tycho2_2mass.dat">Gaia DR2 + Tycho2 + 2MASS (all Vegamags, Gaia passbands from Evans et al. 2018)</option>
+<option value="tab_mag_odfnew/tab_mag_gaiaDR2weiler_tycho2_2mass.dat">Gaia DR2 + Tycho2 + 2MASS (all Vegamags, Gaia passbands from Weiler 2018)</option>
+<option value="tab_mag_odfnew/tab_mag_gaiaEDR3.dat">Gaia EDR3 (all Vegamags, Gaia passbands from ESA/Gaia website)</option>
+<option value="tab_mag_odfnew/tab_mag_gaia.dat">Gaia's DR1 G, G_BP and G_RP (Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_gaiaDR2.dat">Gaia's DR2 G, G_BP and G_RP (Vegamags, Gaia passbands from Evans et al. 2018)</option>
+<option value="tab_mag_odfnew/tab_mag_gaiaDR2maiz.dat">Gaia's DR2 G, G_BP and G_RP (Vegamags, Gaia passbands from Maiz-Apellaniz and Weiler 2018)</option>
+<option value="tab_mag_odfnew/tab_mag_gaiaDR2weiler.dat">Gaia's DR2 G, G_BP and G_RP (Vegamags, Gaia passbands from Weiler 2018)</option>
+<option value="tab_mag_odfnew/tab_mag_UVbright.dat">HST+GALEX+Swift/UVOT UV filters</option>
+<option value="tab_mag_odfnew/tab_mag_acs_hrc.dat">HST/ACS HRC</option>
+<option value="tab_mag_odfnew/tab_mag_acs_wfc_pos04jul06.dat">HST/ACS WFC (c.f. 2007 revision, pos-04jul06)</option>
+<option value="tab_mag_odfnew/tab_mag_acs_wfc_202101.dat">HST/ACS WFC - updated filters and zeropoints, 2021</option>
+<option value="tab_mag_odfnew/tab_mag_acs_wfc3_nircam.dat">HST/ACS+WFC3+JWST/NIRCAM popular filters, all Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_nicmosab.dat">HST/NICMOS AB</option>
+<option value="tab_mag_odfnew/tab_mag_nicmosvega.dat">HST/NICMOS Vega</option>
+<option value="tab_mag_odfnew/tab_mag_stis.dat">HST/STIS imaging mode, Vegamag</option>
+<option value="tab_mag_odfnew/tab_mag_wfc3_wideverywide.dat">HST/WFC3 all W+LP+X filters (UVIS1+IR, final throughputs)</option>
+<option value="tab_mag_odfnew/tab_mag_wfc3_202101_verywide.dat">HST/WFC3 long-pass and extremely wide filters (UVIS) - updated filters and zeropoints, 2021</option>
+<option value="tab_mag_odfnew/tab_mag_wfc3_202101_medium.dat">HST/WFC3 medium filters (UVIS+IR) - updated filters and zeropoints, 2021</option>
+<option value="tab_mag_odfnew/tab_mag_wfc3_202101_wide.dat">HST/WFC3 wide filters (UVIS+IR) - updated filters and zeropoints, 2021</option>
+<option value="tab_mag_odfnew/tab_mag_wfpc2.dat">HST/WFPC2 (Vegamag, cf. Holtzman et al. 1995)</option>
+<option value="tab_mag_odfnew/tab_mag_hipparcos.dat">Hipparcos+Tycho+Gaia DR1 (Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_int_wfc.dat">INT/WFC (Vegamag)</option>
+<option value="tab_mag_odfnew/tab_mag_iphas.dat">IPHAS</option>
+<option value="tab_mag_odfnew/tab_mag_jpas.dat">JPAS (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_miri_wide.dat">JWST MIRI wide filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_narrow.dat">JWST NIRCam narrow filters, Vega-Sirius mags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_nircam_miri_wide.dat">JWST NIRCam wide+verywide + MIRI wide filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_nircam_wide.dat">JWST NIRCam wide+verywide filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_nircam_widemedium_dec23.dat">JWST NIRCam wide+verywide+medium filters (Nov 2022), Vega-Sirius mags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_nircam_widemedium_nov22.dat">JWST NIRCam wide+verywide+medium filters (Nov 2022), Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_nircam_widemedium.dat">JWST NIRCam wide+verywide+medium filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_niriss_nov22.dat">JWST NIRISS filters (Nov 2022), Vega-Sirius mags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_nirspec.dat">JWST Nirspec filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_jwst_fnl.dat">JWST custom, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_kepler.dat">Kepler + SDSS <i>griz</i> + DDO51 (in ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_kepler_2mass.dat">Kepler + SDSS <i>griz</i> + DDO51 (in ABmags) + 2MASS (~Vegamag)</option>
+<option value="tab_mag_odfnew/tab_mag_vst_vista.dat">KiDS/VIKING (VST/OMEGAM + VISTA/VIRCAM, all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_lbt_lbc.dat">LBT/LBC (Vegamag)</option>
+<option value="tab_mag_odfnew/tab_mag_lsst_wfirst_proposed2017.dat">LSST (ABmags) + WFIRST proposed filters (Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_lsstR1.9_gaiaEDR3_euclid_Roman2024.dat">LSST + Gaia + Euclid + Roman (updated as of 2025, LSST+Euclid are ABmags, Gaia+Roman are Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_lsst.dat">LSST ugrizY, March 2012 total filter throughputs (all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_lsstDP0.dat">LSST ugrizy, Oct 2017 total filter throughputs for DP0 (all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_lsstR1.9.dat">LSST ugrizy, Sept 2023, total filter throughputs R1.9 (all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_nmbs.dat">NEWFIRM filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_noao_ctio_mosaic2.dat">NOAO/CTIO/MOSAIC2 (Vegamag)</option>
+<option value="tab_mag_odfnew/tab_mag_ogle.dat">OGLE-II</option>
+<option value="tab_mag_odfnew/tab_mag_PLATO.dat">PLATO plus some other filters</option>
+<option value="tab_mag_odfnew/tab_mag_panstarrs1.dat">Pan-STARRS1</option>
+<option value="tab_mag_odfnew/tab_mag_Roman2021.dat">Roman (ex-WFIRST) 2021 filters, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_Roman2024.dat">Roman latest filters, 2024, Vegamags</option>
+<option value="tab_mag_odfnew/tab_mag_splus.dat">S-PLUS (Vegamags), revised on Nov. 2017</option>
+<option value="tab_mag_odfnew/tab_mag_sloan.dat">SDSS <i>ugriz</i></option>
+<option value="tab_mag_odfnew/tab_mag_sloan_2mass.dat">SDSS <i>ugriz</i> + 2MASS <i>JHK</i><sub>s</sub></option>
+<option value="tab_mag_odfnew/tab_mag_sloan_ukidss.dat">SDSS <i>ugriz</i> + UKIDSS <i>ZYJHK</i></option>
+<option value="tab_mag_odfnew/tab_mag_swift_uvot.dat">SWIFT/UVOT <i>UVW2, UVM2, UVW1,u</i> (Vegamag) </option>
+<option value="tab_mag_odfnew/tab_mag_skymapper.dat">SkyMapper (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_spitzer.dat">Spitzer IRAC+MIPS</option>
+<option value="tab_mag_odfnew/tab_mag_stroemgren.dat">Stroemgren-Crawford</option>
+<option value="tab_mag_odfnew/tab_mag_hsc.dat">Subaru/Hyper Suprime-Cam (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_suprimecam.dat">Subaru/Suprime-Cam (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_SuperBIT.dat">SuperBIT, all ABmags</option>
+<option value="tab_mag_odfnew/tab_mag_TESS_2mass.dat">TESS + 2MASS (Vegamags)</option>
+<option value="tab_mag_odfnew/tab_mag_TESS_2mass_kepler.dat">TESS + 2MASS (Vegamags) + Kepler + SDSS <i>griz</i> + DDO51 (in ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_ukidss.dat">UKIDSS <i>ZYJHK</i> (Vegamag)</option>
+<option value="tab_mag_odfnew/tab_mag_unions.dat">UNIONS (CFHT/Megacam u+r, Subaru/HSC g+z, Pan-STARRS i+z, all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_uvit.dat">UVIT (all ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_vertecs.dat">VERTECS (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_visir.dat">VISIR</option>
+<option value="tab_mag_odfnew/tab_mag_vista.dat">VISTA <i>ZYJHK</i><sub>s</sub> (Vegamag)</option>
+<option value="tab_mag_odfnew/tab_mag_vphas.dat">VPHAS+ (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_vst_omegacam.dat">VST/OMEGACAM (ABmag)</option>
+<option value="tab_mag_odfnew/tab_mag_vilnius.dat">Vilnius</option>
+<option value="tab_mag_odfnew/tab_mag_wfc3_uvisCaHK.dat">WFC3/UVIS around CaHK</option>
+<option value="tab_mag_odfnew/tab_mag_washington_ddo51.dat">Washington <i>CMT<sub>1</sub>T<sub>2</sub></i> + DDO51</option>
+<option value="">ZTF (ABmags)</option>
+<option value="tab_mag_odfnew/tab_mag_deltaa.dat">deltaa (Paunzen) + UBV (Maiz-Apellaniz), in Vegamags</option>
+</select><br>Limiting magnitude in <input type="text" name="icm_lim" value="4" size="1"><sup>th</sup> filter is set to <input type="text" name="mag_lim" value="26" size="6"> mag (max=32 mag) <br>Distance modulus resolution of Galaxy components is <input type="text" name="mag_res" value="0.1" size="4"> mag (min=0.05 mag)</fieldset><fieldset title='IMF and binaries'><legend title='IMF and binaries'>IMF and binaries</legend>IMF for single stars: <select name="imf_file" >
+<option value="tab_imf/imf_salpeter.dat">Salpeter with cutoff at 0.01 M&#9737;</option>
+<option value="tab_imf/imf_chabrier_exponential.dat">Chabrier exponential</option>
+<option selected value="tab_imf/imf_chabrier_lognormal.dat">Chabrier lognormal (see paper)</option>
+<option value="tab_imf/imf_chabrier_lognormal_salpeter.dat">Chabrier lognormal + Salpeter for M>1M&#9737;</option>
+<option value="tab_imf/imf_kroupa.dat">Kroupa (corrected for binaries)</option>
+<option value="tab_imf/imf_kroupa_orig.dat">Kroupa (non corrected for binaries)</option>
+</select><p>Turn binaries <input type="radio" name="binary_kind" value="1" checked >on<input type="radio" name="binary_kind" value="0" >off<br>Binary fraction = <input type="text" name="binary_frac" value="0.3" size="4"> with mass ratios between <input type="text" name="binary_mrinf" value="0.7" size="4"> and <input type="text" name="binary_mrsup" value="1" size="4"><p>Print binary components <input type="radio" name="output_printbinaries" value="0" checked >as a single entry <input type="radio" name="output_printbinaries" value="1" >separately <br></fieldset><fieldset title='Extinction'><legend title='Extinction'>Extinction</legend><input type="radio" name="extinction_kind" value="0" >No dust extinction or <p>Exponential disk exp(-|<i>z</i>|/<i>h<sub>z</sub></i><sub>,dust</sub>)&times;exp(-<i>R</i>/<i>h<sub>R</sub></i><sub>,dust</sub>)<br>with scale heigth <i>h<sub>z</sub></i><sub>,dust</sub>=<input type="text" name="extinction_h_z" value="110" size="6"> pc and scale length <i>h<sub>R</sub></i><sub>,dust</sub>=<input type="text" name="extinction_h_r" value="100000" size="8"> pc <br><input type="radio" name="extinction_kind" value="1" >Local calibration: d<i>A<sub>V</sub></i>/d<i>r</i>(&#9737;)=<input type="text" name="extinction_rho_sun" value="0.00015" size="8"> mag/pc <br><input type="radio" name="extinction_kind" value="2" checked >Calibration at infinity:  <i>A<sub>V</sub></i>(&infin;)=<input type="text" name="extinction_infty" value="0.0378" size="8"> mag <p>1&sigma; dispersion=<input type="text" name="extinction_sigma" value="0" size="4"> times the total extinction (max=0.3)</fieldset><fieldset title='Solar position'><legend title='Solar position'>Solar position</legend>Sun's Galactocentric radius <i>R</i>&#9737;=<input type="text" name="r_sun" value="8700" size="8"> pc, height above disk <i>z</i>&#9737;=<input type="text" name="z_sun" value="24.2" size="8"> pc </fieldset><fieldset title='Thin disc'><legend title='Thin disc'>Thin disc</legend><input type="radio" name="thindisk_kind" value="0" >No thin disc or <p><i>Along z:</i> <input type="radio" name="thindisk_kind" value="1" >Exponential: exp(-|<i>z</i>|/<i>h<sub>z</sub></i><sub>,d</sub>) <input type="radio" name="thindisk_kind" value="3" checked >Squared hyperbolic secant: sech&sup2;(0.5<i>z</i>/<i>h<sub>z</sub></i><sub>,d</sub>) <br>with scale height <i>h<sub>z</sub></i><sub>,d</sub> increasing with age <i>t</i> cf. <i>h<sub>z</sub></i><sub>,d</sub>=<i>z</i><sub>0</sub>(1+<i>t/t</i><sub>0</sub>)<sup>&alpha;</sup> <br><i>z</i><sub>0</sub>=<input type="text" name="thindisk_h_z0" value="94.6902" size="4"> pc, <i>t</i><sub>0</sub>=<input type="text" name="thindisk_hz_tau0" value="5.55079e9" size="12"> yr, &alpha;=<input type="text" name="thindisk_hz_alpha" value="1.6666" size="6">. <p><i>Along R</i>: Exponential disc: exp(-<i>R</i>/<i>h<sub>R</sub></i><sub>,d</sub>) <br>with scale length <i>h<sub>R</sub></i><sub>,d</sub>=<input type="text" name="thindisk_h_r" value="2913.36" size="8"> pc, and inner/outer cutoffs at <i>R</i>=<input type="text" name="thindisk_r_min" value="0" size="6"> pc and <input type="text" name="thindisk_r_max" value="15000" size="6"> pc.<p>Local calibration: &Sigma;<sub>d</sub>(&#9737;)=<input type="text" name="thindisk_rho_sun" value="55.4082" size="6"> M&#9737;/pc&sup2; <p>SFR and AMR given by <select name="thindisk_file" >
+<option value="tab_sfr/file_sfr_thindisk.dat">const. SFR + Fuhrman's AMR + &alpha;-enh.</option>
+<option selected value="tab_sfr/file_sfr_thindisk_mod.dat">2-step SFR + Fuhrman's AMR + &alpha;-enh. (see paper)</option>
+</select> with age(yr)=<input type="text" name="thindisk_a" value="0.735097" size="4">&times;<i>t</i>+<input type="text" name="thindisk_b" value="0" size="4">.</fieldset><fieldset title='Thick disc'><legend title='Thick disc'>Thick disc</legend><input type="radio" name="thickdisk_kind" value="0" >No thick disc or <p><i>Along z:</i> <input type="radio" name="thickdisk_kind" value="1" >Exponential: exp(-|<i>z</i>|/<i>h<sub>z</sub></i><sub>,td</sub>) <input type="radio" name="thickdisk_kind" value="3" checked >Squared hyperbolic secant: sech&sup2;(0.5<i>z</i>/<i>h<sub>z</sub></i><sub>,td</sub>) <br>with scale height <i>h<sub>z</sub></i><sub>,td</sub>=<input type="text" name="thickdisk_h_z" value="800" size="6"> pc <p><i>Along R</i>: Exponential disc: exp(-<i>R</i>/<i>h<sub>R</sub></i><sub>,td</sub>) <br>with scale length <i>h<sub>R</sub></i><sub>,td</sub>=<input type="text" name="thickdisk_h_r" value="2394.07" size="8"> pc, and inner/outer cutoffs at <i>R</i>=<input type="text" name="thickdisk_r_min" value="0" size="6"> pc and <input type="text" name="thickdisk_r_max" value="15000" size="6"> pc.<p>Local calibration: &Omega;<sub>td</sub>(&#9737;)=<input type="text" name="thickdisk_rho_sun" value="0.0010" size="6"> M&#9737;/pc&sup3; <p>SFR and AMR given by <select name="thickdisk_file" >
+<option selected value="tab_sfr/file_sfr_thickdisk.dat">11-12 Gyr const. SFR + Z=0.008 with &sigma;[M/H]=0.1 dex</option>
+</select> with age(yr)=<input type="text" name="thickdisk_a" value="1" size="4">&times;<i>t</i>+<input type="text" name="thickdisk_b" value="0" size="4">.</fieldset><fieldset title='Halo'><legend title='Halo'>Halo</legend><input type="radio" name="halo_kind" value="0" >No halo or <p><input type="radio" name="halo_kind" value="1" ><i>r</i>&frac14; Spheroid <br><input type="radio" name="halo_kind" value="2" checked >Oblate <i>r</i>&frac14; Spheroid <br>Effective radius <i>r</i><sub>h</sub>=<input type="text" name="halo_r_eff" value="2698.93" size="6"> pc (at major axis), oblateness <i>q</i><sub>h</sub>=<input type="text" name="halo_q" value="0.583063" size="6"><p>Local calibration: &Omega;<sub>h</sub>(&#9737;)=<input type="text" name="halo_rho_sun" value="0.000100397" size="6"> M&#9737;/pc&sup3; <p>SFR and AMR given by <select name="halo_file" >
+<option selected value="tab_sfr/file_sfr_halo.dat">12-13 Gyr + Ryan & Norris [M/H] distribution</option>
+<option value="tab_sfr/file_sfr_halo_orig.dat">12-13 Gyr + Z=0.0095 with &sigma;[M/H]=1.0 dex</option>
+</select> with age(yr)=<input type="text" name="halo_a" value="1" size="4">&times;<i>t</i>+<input type="text" name="halo_b" value="0" size="4">.</fieldset><fieldset title='Bulge'><legend title='Bulge'>Bulge</legend><font size=-1>See <a href='http://arxiv.org/abs/0903.0946'>Vanhollebeke et al. (2009)</a> for details.</font> <br><input type="radio" name="bulge_kind" value="0" >No bulge or <br><input type="radio" name="bulge_kind" value="2" checked >Triaxial bulge <br>Scale length <i>a<sub>m</sub></i>=<input type="text" name="bulge_am" value="2500" size="6"> pc, truncation scale length <i>a</i><sub>0</sub>=<input type="text" name="bulge_a0" value="95" size="6"> pc, <br><i>y/x</i> axial ratio &eta;=<input type="text" name="bulge_eta" value="0.68" size="4"> <i>z/x</i> axial ratio &xi;=<input type="text" name="bulge_csi" value="0.31" size="4"> <br>Sun-GC-bar angle &phi;<sub>0</sub>=<input type="text" name="bulge_phi0" value="15" size="4">&deg;<p>Central calibration: &Omega;<sub>b</sub>(GC)=<input type="text" name="bulge_rho_central" value="406.0" size="6"> M&#9737;/pc&sup3; <p>SFR and AMR given by <select name="bulge_file" >
+<option value="tab_sfr/file_sfr_bulge_zoccali.dat">10 Gyr, Zoccali et al. 2003 [M/H]</option>
+<option selected value="tab_sfr/file_sfr_bulge_zoccali_p03.dat">10 Gyr, Zoccali et al.2003 [M/H] + 0.3 dex</option>
+</select> with age(yr)=<input type="text" name="bulge_a" value="1" size="4">&times;<i>t</i>+<input type="text" name="bulge_b" value="-2.0e9" size="4">.</fieldset><fieldset title='Additional object'><legend title='Additional object'>Additional object</legend><p>The addition of star clusters and galaxies is being planned. It requires a major upgrade of the web forms.</p><input type="hidden" name="object_kind" value="0" ><input type="hidden" name="object_mass" value="1280" ><input type="hidden" name="object_dist" value="1658" ><input type="hidden" name="object_av" value="1.504" ><input type="hidden" name="object_avkind" value="1" ><input type="hidden" name="object_file" value="tab_sfr/file_sfr_m4.dat" ><input type="hidden" name="object_a" value="1" ><input type="hidden" name="object_b" value="0" ></fieldset><input type="hidden" name="output_kind" value="1" ><input type="hidden" name="object_kind" value="0" ><input type="hidden" name="bulge_cutoffmass" value="0.01" ><input type="hidden" name="object_cutoffmass" value="0.8" ><input type="submit" name="submit_form" value="Submit" > <input type="submit" name="reset_form" value="Reset" ><div><input type="hidden" name=".cgifields" value="binary_kind" ><input type="hidden" name=".cgifields" value="bulge_kind" ><input type="hidden" name=".cgifields" value="extinction_kind" ><input type="hidden" name=".cgifields" value="gal_coord" ><input type="hidden" name=".cgifields" value="halo_kind" ><input type="hidden" name=".cgifields" value="output_printbinaries" ><input type="hidden" name=".cgifields" value="thickdisk_kind" ><input type="hidden" name=".cgifields" value="thindisk_kind" ></div></form><hr><center><font size="-1">This service is mantained by <a href='http://web.oapd.inaf.it/lgirardi/'>L&eacute;o Girardi</a> at the <a href='http://www.oapd.inaf.it/'>Osservatorio Astronomico di Padova</a>. <br> Questions, comments and special requests should be directed to leo.girardi&#64;oapd&#183;inaf&#183;it . <br>Last modified: Thu Jun 26 10:21:59 2025</font></center>
+</body>
+</html>

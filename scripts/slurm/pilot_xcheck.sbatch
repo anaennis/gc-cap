@@ -13,6 +13,7 @@ echo "job=$SLURM_JOB_ID node=$(hostname) commit=$(git rev-parse HEAD) dirty=$(gi
 lscpu | grep -E "Model name|^CPU\(s\)"
 ml purge; ml system git/2.45.1 python/3.12.1 math
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+export PYTHONPATH="$PWD"
 for n in 1e4 1e6; do
   .venv/bin/python scripts/pilot_xcheck.py logs/pilot_xcheck_${SLURM_JOB_ID}_N$n.json $n $SLURM_CPUS_PER_TASK
 done

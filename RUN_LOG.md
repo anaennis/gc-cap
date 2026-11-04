@@ -155,3 +155,10 @@ STOPPED at Step 0: CRITERIA.md is uncommitted and 8 [FILL] items are unfilled. I
 - AGENTS.md re-read; CRITERIA sha256 OK.
 - Test suite (job 50800396, sh03-18n07, commit 0444774): **21 passed, 1 xfailed** (padova_c3k GC u−g, strict-xfail per P15). All required tests pass: reproducibility from seed, shuffled-label null, noise-free GC color range (mist_miles PASS; padova_c3k FAIL as documented), **bound non-decreasing with depth PASS**. One RuntimeWarning (NaN in `Likelihood.window` for empty pilot cells; expected sparse/empty faint bins, cells with TP < 1,000 not checked). Step 2 complete.
 - Throughput pilot submitted (`scripts/pilot_throughput.py`, fiducial, production bank sizes 1e6/4e6, seed keys (pilot_throughput, pilot, 41/42)); output to logs/ only.
+2026-11-04T11:29:21-0800 fetch_trilegal job 51096604 on sh02-03n47.int: done (see logs/fetch_trilegal_51096604.out)
+
+## 2026-11-04 — Sherlock session 4
+- AGENTS.md re-read; CRITERIA sha256 OK. Pilot 50925527 still pending (owners); kipac has no GPU nodes, so it stays there.
+- Arm S: TRILEGAL TLS fixed by supplying the missing ZeroSSL intermediate (DATA_LOG #22–24, no `-k`). Fetch job 51096604 submitted (DATA_LOG #25).
+- GBDT cross-check (`gccap/xcheck.py`), implementation choices logged **before any run**: fixed params from PLAN §4 (num_leaves 255, lr 0.05, min_child_samples 100, feature_fraction 1.0), n_estimators ≤ 5000 (as M4–M6), early stopping 100 rounds on weighted binary logloss. **Validation set** (PLAN says only "separate"): built like the train set with seed key (config, train-N, replicate 1) and N_GC/10 GCs; the train set is replicate 0, the same set M4–M6 use. Bin is a categorical feature; LightGBM seed = int_seed of the train key. Scores are thresholded per bin on the shared test set.
+- Cross-check pilot (`scripts/pilot_xcheck.py`, fiducial, seed keys (pilot_xcheck, pilot, 51/52/53)); logs/ only.

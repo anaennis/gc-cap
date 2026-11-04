@@ -33,7 +33,7 @@ def contaminants(sim, config, star_frac_below_24=None):
     out = [Contaminant(CLASS_GAL, sim.galaxy, P.gal_pop_per_gc_draw(config))]
     if config["stars"]:
         if star_frac_below_24 is None:
-            raise RuntimeError("arm S needs the star bank's i<24 fraction")
+            star_frac_below_24 = sim.star_frac_below_24()
         out.append(Contaminant(CLASS_STAR, sim.star,
                                F.STAR_PER_GC * P.gc_frac_below(F.RATIO_REF_IMAX) / star_frac_below_24))
     return out

@@ -8,6 +8,10 @@ import numpy as np
 from scipy.special import ndtr
 
 from . import frozen as F
+from .noise import mag_to_flux
+
+STAR_BANK = F.ROOT / "results" / "trilegal" / "trilegal_ngc1399_10deg2_i27.5.dat"
+STAR_BANK_SHA256 = "122c1450086af4ca319f762f0ef00c7d5abd0cb6409a9e8bead0cc898c3c0041"  # DATA_LOG #25
 
 # --- GCs ---------------------------------------------------------------------------------------
 
@@ -93,6 +97,17 @@ def true_mags(dm, i_true):
     return dm + np.asarray(i_true)[:, None]
 
 
+def load_star_bank(path=STAR_BANK):
+    """TRILEGAL 1.6 apparent AB magnitudes (u, g, r, i, z, y), one row per simulated star (CRITERIA §4.3).
+    Every row is kept; stars are resampled with replacement and pass through the common noise model."""
+    if F.sha256_file(path) != STAR_BANK_SHA256:
+        raise RuntimeError(f"{path}: sha256 differs from DATA_LOG #25")
+    with open(path) as fh:
+        cols = fh.readline().lstrip("#").split()
+    use = [cols.index(b) for b in ("u", "g", "r", "i", "z", "y")]
+    return np.loadtxt(path, comments="#", usecols=use, ndmin=2)
+
+
 class Simulator:
     """Latent draws -> true magnitudes for one configuration, using the interpolated grids (PLAN F6)."""
 
@@ -112,3 +127,13 @@ class Simulator:
             raise RuntimeError("arm S needs the TRILEGAL star bank")
         idx = rng.integers(0, self.star_bank.shape[0], n)
         return {"bank_row": idx, "i_true": self.star_bank[idx, F.I_BAND]}, self.star_bank[idx]
+
+    def star_frac_below_24(self):
+        return float(np.mean(self.star_bank[:, F.I_BAND] < F.RATIO_REF_IMAX))
+
+    def star_pop_per_gc_draw(self):
+        """Star population per GC draw, from N_star(i<24)/N_GC(i<24) = STAR_PER_GC (§4.3)."""
+        return F.STAR_PER_GC * gc_frac_below(F.RATIO_REF_IMAX) / self.star_frac_below_24()
+
+    def star_bank_flux(self):
+        return mag_to_flux(self.star_bank)
